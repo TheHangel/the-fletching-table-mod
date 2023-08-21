@@ -1,0 +1,124 @@
+{
+  "mod_elements": [
+    {
+      "name": "FletchingTableGui",
+      "type": "gui",
+      "compiles": true,
+      "locked_code": false,
+      "registry_name": "fletching_table_gui",
+      "metadata": {
+        "files": [
+          "src/main/java/dev/hangel/thefletchingtablemod/world/inventory/FletchingTableGuiMenu.java",
+          "src/main/java/dev/hangel/thefletchingtablemod/network/FletchingTableGuiSlotMessage.java",
+          "src/main/java/dev/hangel/thefletchingtablemod/client/gui/FletchingTableGuiScreen.java"
+        ]
+      }
+    },
+    {
+      "name": "FletchingTableClickEvent",
+      "type": "procedure",
+      "sortid": 2,
+      "compiles": true,
+      "locked_code": false,
+      "registry_name": "fletching_table_click_event",
+      "metadata": {
+        "files": [
+          "src/main/java/dev/hangel/thefletchingtablemod/procedures/FletchingTableClickEventProcedure.java"
+        ],
+        "dependencies": [
+          {
+            "name": "entity",
+            "type": "entity"
+          },
+          {
+            "name": "x",
+            "type": "number"
+          },
+          {
+            "name": "y",
+            "type": "number"
+          },
+          {
+            "name": "z",
+            "type": "number"
+          },
+          {
+            "name": "world",
+            "type": "world"
+          }
+        ]
+      }
+    },
+    {
+      "name": "FletchingTableGuiSlotUpdate",
+      "type": "procedure",
+      "sortid": 1,
+      "compiles": true,
+      "locked_code": false,
+      "registry_name": "fletching_table_gui_slot_update",
+      "metadata": {
+        "files": [
+          "src/main/java/dev/hangel/thefletchingtablemod/procedures/FletchingTableGuiSlotUpdateProcedure.java"
+        ],
+        "dependencies": [
+          {
+            "name": "entity",
+            "type": "entity"
+          }
+        ]
+      }
+    },
+    {
+      "name": "FletchingTableGuiOutputEvent",
+      "type": "procedure",
+      "sortid": 3,
+      "compiles": true,
+      "locked_code": false,
+      "registry_name": "fletching_table_gui_output_event",
+      "metadata": {
+        "files": [
+          "src/main/java/dev/hangel/thefletchingtablemod/procedures/FletchingTableGuiOutputEventProcedure.java"
+        ],
+        "dependencies": [
+          {
+            "name": "entity",
+            "type": "entity"
+          }
+        ]
+      }
+    }
+  ],
+  "variable_elements": [],
+  "sound_elements": [],
+  "language_map": {
+    "en_us": {
+      "gui.the_fletching_table_mod.fletching_table_gui.label_empty": "Fletching Table",
+      "gui.the_fletching_table_mod.fletching_table_gui.label_inventory": "Inventory"
+    }
+  },
+  "foldersRoot": {
+    "name": "~",
+    "children": []
+  },
+  "workspaceSettings": {
+    "modid": "the_fletching_table_mod",
+    "modName": "The Fletching Table Mod",
+    "version": "1.3",
+    "description": "This mod makes useful the unused Fletching Table block!",
+    "author": "The_Hangel",
+    "websiteURL": "https://www.hangel.dev/",
+    "license": "All Rights Reserved",
+    "disableForgeVersionCheck": true,
+    "serverSideOnly": false,
+    "modPicture": "latest",
+    "requiredMods": [],
+    "dependencies": [],
+    "dependants": [],
+    "mcreatorDependencies": [],
+    "currentGenerator": "forge-1.20.1",
+    "credits": "Nobody",
+    "modElementsPackage": "dev.hangel.thefletchingtablemod",
+    "lockBaseModFiles": false
+  },
+  "mcreatorVersion": 202300333711
+}
