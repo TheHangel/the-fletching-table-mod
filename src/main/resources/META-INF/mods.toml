@@ -1,0 +1,24 @@
+modLoader="javafml"
+loaderVersion="[45,)"
+license="All Rights Reserved"
+
+[[mods]]
+modId="the_fletching_table_mod"
+version="1.3"
+displayName="The Fletching Table Mod"
+credits="Nobody"
+displayURL="https://www.hangel.dev/"
+logoFile="logo.png"
+authors="The_Hangel"
+description="This mod makes useful the unused Fletching Table block!"
+
+[[dependencies.the_fletching_table_mod]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.19.4]"
+    ordering="NONE"
+    side="BOTH"
+
+
+
+
