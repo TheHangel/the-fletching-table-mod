@@ -1,31 +1,30 @@
 {
 	"schemaVersion": 1,
-	"id": "modid",
+	"id": "the_fletching_table_mod",
 	"version": "${version}",
-	"name": "Example mod",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"name": "The Fletching Table Mod",
+	"description": "This mod makes useful the unused Fletching Table block!",
 	"authors": [
-		"Me!"
+		"TheHangel"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://www.hangel.dev/"
 	},
-	"license": "CC0-1.0",
-	"icon": "assets/modid/icon.png",
+	"license": "All Rights Reserved.",
+	"icon": "assets/the_fletching_table_mod/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.example.ExampleMod"
+			"dev.hangel.the_fletching_table_mod.TheFletchingTableMod"
 		],
 		"client": [
-			"com.example.ExampleModClient"
+			"dev.hangel.the_fletching_table_mod.TheFletchingTableModClient"
 		]
 	},
 	"mixins": [
-		"modid.mixins.json",
+		"the_fletching_table_mod.mixins.json",
 		{
-			"config": "modid.client.mixins.json",
+			"config": "the_fletching_table_mod.client.mixins.json",
 			"environment": "client"
 		}
 	],

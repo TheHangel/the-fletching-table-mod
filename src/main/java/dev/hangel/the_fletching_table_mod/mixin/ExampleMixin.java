@@ -1,4 +1,4 @@
-package com.example.mixin;
+package dev.hangel.the_fletching_table_mod.mixin;
 
 import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
