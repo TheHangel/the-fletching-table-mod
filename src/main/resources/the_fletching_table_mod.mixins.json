@@ -3,7 +3,8 @@
 	"package": "dev.hangel.the_fletching_table_mod.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
-		"ExampleMixin"
+		"ExampleMixin",
+		"FletchingTableBlockMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
