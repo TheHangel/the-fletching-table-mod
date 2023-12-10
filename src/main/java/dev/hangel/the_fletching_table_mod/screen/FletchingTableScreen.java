@@ -1,4 +1,4 @@
-package dev.hangel.the_fletching_table_mod;
+package dev.hangel.the_fletching_table_mod.screen;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

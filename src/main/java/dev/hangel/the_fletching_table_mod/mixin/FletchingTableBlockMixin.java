@@ -1,10 +1,14 @@
 package dev.hangel.the_fletching_table_mod.mixin;
 
-import dev.hangel.the_fletching_table_mod.TheFletchingTableMod;
+import dev.hangel.the_fletching_table_mod.screen.FletchingTableScreenHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CraftingTableBlock;
 import net.minecraft.block.FletchingTableBlock;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.screen.ScreenHandlerContext;
+import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -25,22 +29,16 @@ public abstract class FletchingTableBlockMixin extends CraftingTableBlock {
         super(settings);
     }
 
-    /*@Override
+    @Override
     public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
-        return new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> new FletchingScreenHandler(syncId, inventory, ScreenHandlerContext.create(world, pos)), SCREEN_TITLE);
-    }*/
+        return new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> new FletchingTableScreenHandler(ScreenHandlerType.CRAFTING, syncId));
+    }
 
     @Inject(method = "onUse", at = @At("HEAD"), cancellable = true)
     private void onUseMixin(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> info) {
-        /*if (AdditionMain.CONFIG.fletching_table_use) {
-            if (!world.isClient) {
-                player.openHandledScreen(state.createScreenHandlerFactory(world, pos));
-            }
-            info.setReturnValue(ActionResult.success(world.isClient));
-        }*/
-        //if (world.isClient) {
-            player.swingHand(hand);
-            player.sendMessage(Text.literal("FLET"), true);
-        //}
+        if (!world.isClient) {
+            player.openHandledScreen(state.createScreenHandlerFactory(world, pos));
+        }
+        info.setReturnValue(ActionResult.success(world.isClient));
     }
 }
