@@ -1,9 +1,9 @@
 
 package dev.hangel.thefletchingtablemod.network;
 
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.bus.api.SubscribeEvent;
 
 import net.minecraft.world.level.Level;
@@ -11,8 +11,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.network.protocol.PacketFlow;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.core.BlockPos;
 
 import java.util.HashMap;
@@ -21,33 +22,27 @@ import dev.hangel.thefletchingtablemod.world.inventory.FletchingTableGuiMenu;
 import dev.hangel.thefletchingtablemod.procedures.FletchingTableGuiOutputEventProcedure;
 import dev.hangel.thefletchingtablemod.TheFletchingTableModMod;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
 public record FletchingTableGuiSlotMessage(int slotID, int x, int y, int z, int changeType, int meta) implements CustomPacketPayload {
 
-	public static final ResourceLocation ID = new ResourceLocation(TheFletchingTableModMod.MODID, "fletching_table_gui_slots");
-	public FletchingTableGuiSlotMessage(FriendlyByteBuf buffer) {
-		this(buffer.readInt(), buffer.readInt(), buffer.readInt(), buffer.readInt(), buffer.readInt(), buffer.readInt());
-	}
-
+	public static final Type<FletchingTableGuiSlotMessage> TYPE = new Type<>(new ResourceLocation(TheFletchingTableModMod.MODID, "fletching_table_gui_slots"));
+	public static final StreamCodec<RegistryFriendlyByteBuf, FletchingTableGuiSlotMessage> STREAM_CODEC = StreamCodec.of((RegistryFriendlyByteBuf buffer, FletchingTableGuiSlotMessage message) -> {
+		buffer.writeInt(message.slotID);
+		buffer.writeInt(message.x);
+		buffer.writeInt(message.y);
+		buffer.writeInt(message.z);
+		buffer.writeInt(message.changeType);
+		buffer.writeInt(message.meta);
+	}, (RegistryFriendlyByteBuf buffer) -> new FletchingTableGuiSlotMessage(buffer.readInt(), buffer.readInt(), buffer.readInt(), buffer.readInt(), buffer.readInt(), buffer.readInt()));
 	@Override
-	public void write(final FriendlyByteBuf buffer) {
-		buffer.writeInt(slotID);
-		buffer.writeInt(x);
-		buffer.writeInt(y);
-		buffer.writeInt(z);
-		buffer.writeInt(changeType);
-		buffer.writeInt(meta);
+	public Type<FletchingTableGuiSlotMessage> type() {
+		return TYPE;
 	}
 
-	@Override
-	public ResourceLocation id() {
-		return ID;
-	}
-
-	public static void handleData(final FletchingTableGuiSlotMessage message, final PlayPayloadContext context) {
+	public static void handleData(final FletchingTableGuiSlotMessage message, final IPayloadContext context) {
 		if (context.flow() == PacketFlow.SERVERBOUND) {
-			context.workHandler().submitAsync(() -> {
-				Player entity = context.player().get();
+			context.enqueueWork(() -> {
+				Player entity = context.player();
 				int slotID = message.slotID;
 				int changeType = message.changeType;
 				int meta = message.meta;
@@ -56,7 +51,7 @@ public record FletchingTableGuiSlotMessage(int slotID, int x, int y, int z, int 
 				int z = message.z;
 				handleSlotAction(entity, slotID, changeType, meta, x, y, z);
 			}).exceptionally(e -> {
-				context.packetHandler().disconnect(Component.literal(e.getMessage()));
+				context.connection().disconnect(Component.literal(e.getMessage()));
 				return null;
 			});
 		}
@@ -76,6 +71,6 @@ public record FletchingTableGuiSlotMessage(int slotID, int x, int y, int z, int 
 
 	@SubscribeEvent
 	public static void registerMessage(FMLCommonSetupEvent event) {
-		TheFletchingTableModMod.addNetworkMessage(FletchingTableGuiSlotMessage.ID, FletchingTableGuiSlotMessage::new, FletchingTableGuiSlotMessage::handleData);
+		TheFletchingTableModMod.addNetworkMessage(FletchingTableGuiSlotMessage.TYPE, FletchingTableGuiSlotMessage.STREAM_CODEC, FletchingTableGuiSlotMessage::handleData);
 	}
 }

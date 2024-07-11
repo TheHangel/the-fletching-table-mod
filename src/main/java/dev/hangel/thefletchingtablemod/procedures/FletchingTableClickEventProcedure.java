@@ -1,7 +1,7 @@
 package dev.hangel.thefletchingtablemod.procedures;
 
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.bus.api.Event;
 
@@ -25,7 +25,7 @@ import io.netty.buffer.Unpooled;
 
 import dev.hangel.thefletchingtablemod.world.inventory.FletchingTableGuiMenu;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class FletchingTableClickEventProcedure {
 	@SubscribeEvent
 	public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
@@ -50,6 +50,11 @@ public class FletchingTableClickEventProcedure {
 					@Override
 					public Component getDisplayName() {
 						return Component.literal("FletchingTableGui");
+					}
+
+					@Override
+					public boolean shouldTriggerClientSideContainerClosingOnOpen() {
+						return false;
 					}
 
 					@Override

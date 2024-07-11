@@ -3,7 +3,6 @@
     {
       "name": "FletchingTableGui",
       "type": "gui",
-      "sortid": 4,
       "compiles": true,
       "locked_code": false,
       "registry_name": "fletching_table_gui",
@@ -18,7 +17,6 @@
     {
       "name": "FletchingTableClickEvent",
       "type": "procedure",
-      "sortid": 2,
       "compiles": true,
       "locked_code": false,
       "registry_name": "fletching_table_click_event",
@@ -53,7 +51,6 @@
     {
       "name": "FletchingTableGuiSlotUpdate",
       "type": "procedure",
-      "sortid": 1,
       "compiles": true,
       "locked_code": false,
       "registry_name": "fletching_table_gui_slot_update",
@@ -72,7 +69,6 @@
     {
       "name": "FletchingTableGuiOutputEvent",
       "type": "procedure",
-      "sortid": 3,
       "compiles": true,
       "locked_code": false,
       "registry_name": "fletching_table_gui_output_event",
@@ -92,6 +88,7 @@
   "variable_elements": [],
   "sound_elements": [],
   "tag_elements": {},
+  "tab_element_order": {},
   "language_map": {
     "en_us": {
       "gui.the_fletching_table_mod.fletching_table_gui.label_empty": "Fletching Table",
@@ -116,9 +113,9 @@
     "dependencies": [],
     "dependants": [],
     "mcreatorDependencies": [],
-    "currentGenerator": "neoforge-1.20.4",
+    "currentGenerator": "neoforge-1.20.6",
     "credits": "Nobody",
     "modElementsPackage": "dev.hangel.thefletchingtablemod"
   },
-  "mcreatorVersion": 202400110712
+  "mcreatorVersion": 202400227311
 }
