@@ -23,6 +23,9 @@
 		],
 		"client": [
 			"dev.hangel.thefletchingtablemod.TheFletchingTableModClient"
+		],
+		"rei_client": [
+			"dev.hangel.thefletchingtablemod.rei.TheFletchingTableModREIClient"
 		]
 	},
 	"mixins": [
