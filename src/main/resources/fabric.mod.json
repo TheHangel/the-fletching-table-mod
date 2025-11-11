@@ -1,6 +1,6 @@
 {
 	"schemaVersion": 1,
-	"id": "the-fletching-table-mod",
+	"id": "the_fletching_table_mod",
 	"version": "${version}",
 	"name": "The Fletching Table Mod",
 	"description": "This is an example description! Tell everyone what your mod is about!",
@@ -12,7 +12,7 @@
 		"sources": "https://github.com/FabricMC/fabric-example-mod"
 	},
 	"license": "ALR",
-	"icon": "assets/the-fletching-table-mod/icon.png",
+	"icon": "assets/the_fletching_table_mod/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [

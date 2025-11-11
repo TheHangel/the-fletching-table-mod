@@ -1,8 +1,11 @@
 package dev.hangel.thefletchingtablemod;
 
+import dev.hangel.thefletchingtablemod.recipe.FletchingTableRecipe;
 import dev.hangel.thefletchingtablemod.screen.FletchingTableBlockScreenHandler;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
+import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.recipe.RecipeType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.screen.ScreenHandlerType;
@@ -16,9 +19,22 @@ public class TheFletchingTableMod implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	public static final ScreenHandlerType<FletchingTableBlockScreenHandler> FLETCHING_TABLE_SCREEN_HANDLER =
-			Registry.register(Registries.SCREEN_HANDLER, Identifier.of(MOD_ID, "fletching_table_block_screen_handler"),
-					new ExtendedScreenHandlerType<>(FletchingTableBlockScreenHandler::new, BlockPos.PACKET_CODEC)
-			);
+		Registry.register(Registries.SCREEN_HANDLER, Identifier.of(MOD_ID, "fletching_table_block_screen_handler"),
+			new ExtendedScreenHandlerType<>(FletchingTableBlockScreenHandler::new, BlockPos.PACKET_CODEC)
+		);
+
+	public static final RecipeSerializer<FletchingTableRecipe> FLETCHING_TABLE_RECIPE_SERIALIZER = Registry.register(
+		Registries.RECIPE_SERIALIZER, Identifier.of(MOD_ID, "fletching_table"), new FletchingTableRecipe.Serializer()
+	);
+
+	public static final RecipeType<FletchingTableRecipe> FLETCHING_TABLE_RECIPE_TYPE = Registry.register(
+		Registries.RECIPE_TYPE, Identifier.of(MOD_ID, "fletching_table"), new RecipeType<FletchingTableRecipe>() {
+			@Override
+			public String toString() {
+				return "fletching_table";
+			}
+		}
+	);
 
 	@Override
 	public void onInitialize() {

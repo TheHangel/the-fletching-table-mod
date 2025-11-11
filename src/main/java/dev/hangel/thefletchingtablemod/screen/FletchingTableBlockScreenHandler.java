@@ -1,6 +1,8 @@
 package dev.hangel.thefletchingtablemod.screen;
 
 import dev.hangel.thefletchingtablemod.TheFletchingTableMod;
+import dev.hangel.thefletchingtablemod.recipe.FletchingTableRecipe;
+import dev.hangel.thefletchingtablemod.recipe.FletchingTableRecipeInput;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.entity.player.PlayerEntity;
@@ -9,10 +11,14 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.Optional;
 
 public class FletchingTableBlockScreenHandler extends ScreenHandler {
     private final Inventory inventory;
@@ -44,14 +50,14 @@ public class FletchingTableBlockScreenHandler extends ScreenHandler {
         this.pos = pos;
         this.opener = playerInventory.player;
 
-        this.addSlot(new Slot(this.inventory, 0,  25, 34) {
+        this.addSlot(new Slot(this.inventory, ARROW_SLOT,  25, 34) {
             @Override
             public boolean canInsert(ItemStack stack) {
                 return stack.isOf(Items.ARROW);
             }
         });
 
-        this.addSlot(new Slot(this.inventory, 1,  78, 34) {
+        this.addSlot(new Slot(this.inventory, POTION_SLOT,  78, 34) {
             @Override public boolean canInsert(ItemStack stack) {
                 return stack.isOf(Items.POTION)
                     || stack.isOf(Items.SPLASH_POTION)
@@ -59,7 +65,7 @@ public class FletchingTableBlockScreenHandler extends ScreenHandler {
             }
         });
 
-        this.addSlot(new Slot(this.inventory, 2, 132, 34) {
+        this.addSlot(new Slot(this.inventory, TIPPED_ARROW_SLOT, 132, 34) {
             @Override public boolean canInsert(ItemStack stack) { return false; }
 
             @Override
@@ -90,8 +96,12 @@ public class FletchingTableBlockScreenHandler extends ScreenHandler {
     }
 
     private void showTippedArrows() {
+        Optional<RecipeEntry<FletchingTableRecipe>> recipe = getCurrentRecipe();
+        if(recipe.isEmpty()) return;
+
         int count = this.inventory.getStack(ARROW_SLOT).getCount();
-        ItemStack tippedArrowsStack = new ItemStack(Items.TIPPED_ARROW, count);
+        ItemStack tippedArrowsStack = recipe.get().value().output();
+        tippedArrowsStack.setCount(count);
 
         ItemStack potionStack = this.inventory.getStack(POTION_SLOT);
 
@@ -113,11 +123,12 @@ public class FletchingTableBlockScreenHandler extends ScreenHandler {
     }
 
     private boolean hasRecipe() {
-        return (this.inventory.getStack(ARROW_SLOT).isOf(Items.ARROW) && (
-            this.inventory.getStack(POTION_SLOT).isOf(Items.POTION)
-                || this.inventory.getStack(POTION_SLOT).isOf(Items.LINGERING_POTION)
-                || this.inventory.getStack(POTION_SLOT).isOf(Items.SPLASH_POTION)
-        ));
+        Optional<RecipeEntry<FletchingTableRecipe>> recipe = getCurrentRecipe();
+        return recipe.isPresent();
+    }
+
+    private Optional<RecipeEntry<FletchingTableRecipe>> getCurrentRecipe() {
+        return this.opener.getWorld().getRecipeManager().getFirstMatch(TheFletchingTableMod.FLETCHING_TABLE_RECIPE_TYPE, new FletchingTableRecipeInput(inventory.getStack(ARROW_SLOT), inventory.getStack(POTION_SLOT)), this.opener.getWorld());
     }
 
     @Override
