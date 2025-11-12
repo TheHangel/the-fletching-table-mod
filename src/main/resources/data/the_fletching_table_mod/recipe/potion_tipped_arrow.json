@@ -6,9 +6,7 @@
     "potion": {
         "item": "minecraft:potion"
     },
-    "result": { "id": "minecraft:tipped_arrow",
-        "components": {
-            "minecraft:potion_contents": { "potion": "minecraft:swiftness" }
-        }
+    "result": {
+        "id": "minecraft:tipped_arrow"
     }
 }

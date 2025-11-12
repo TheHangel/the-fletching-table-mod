@@ -65,7 +65,8 @@ public record FletchingTableRecipe(Ingredient arrowInput, Ingredient potionInput
                 Ingredient.PACKET_CODEC, FletchingTableRecipe::arrowInput,
                 Ingredient.PACKET_CODEC, FletchingTableRecipe::potionInput,
                 ItemStack.PACKET_CODEC, FletchingTableRecipe::output,
-                FletchingTableRecipe::new);
+                FletchingTableRecipe::new
+            );
 
         @Override
         public MapCodec<FletchingTableRecipe> codec() {
