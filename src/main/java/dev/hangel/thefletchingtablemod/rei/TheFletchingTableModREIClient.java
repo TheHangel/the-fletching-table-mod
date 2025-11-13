@@ -81,11 +81,6 @@ public class TheFletchingTableModREIClient implements REIClientPlugin {
                         if (!normal.getName().getString()
                                 .equals(Text.translatable("item.minecraft.potion.effect.empty").getString())) {
 
-                            if (!normal.getName().getString()
-                                    .equals(Text.translatable("item.minecraft.potion.effect.night_vision").getString())) {
-
-                            }
-
                             ItemStack out = new ItemStack(Items.TIPPED_ARROW);
                             out.set(DataComponentTypes.POTION_CONTENTS, comp);
 
