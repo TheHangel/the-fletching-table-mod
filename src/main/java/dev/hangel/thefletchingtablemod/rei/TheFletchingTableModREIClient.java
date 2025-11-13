@@ -66,10 +66,12 @@ public class TheFletchingTableModREIClient implements REIClientPlugin {
                         }
                     }
 
+                    RegistryEntry<Potion> entry = Registries.POTION.getEntry(potion);
+
                     PotionContentsComponent comp = new PotionContentsComponent(
-                            Optional.of(new RegistryEntry.Direct<>(potion)),     // pas besoin de RegistryEntry.Direct ici
-                            Optional.empty(),
-                            List.of()
+                        Optional.of(entry),
+                        Optional.empty(),
+                        List.of()
                     );
 
                     if (allowNormal) {
@@ -79,12 +81,17 @@ public class TheFletchingTableModREIClient implements REIClientPlugin {
                         if (!normal.getName().getString()
                                 .equals(Text.translatable("item.minecraft.potion.effect.empty").getString())) {
 
+                            if (!normal.getName().getString()
+                                    .equals(Text.translatable("item.minecraft.potion.effect.night_vision").getString())) {
+
+                            }
+
                             ItemStack out = new ItemStack(Items.TIPPED_ARROW);
                             out.set(DataComponentTypes.POTION_CONTENTS, comp);
 
                             registry.add(new FletchingTableDisplay(
-                                    List.of(inArrow, EntryIngredient.of(EntryStacks.of(normal))),
-                                    List.of(EntryIngredient.of(EntryStacks.of(out)))
+                                List.of(inArrow, EntryIngredient.of(EntryStacks.of(normal))),
+                                List.of(EntryIngredient.of(EntryStacks.of(out)))
                             ));
                         }
                     }
@@ -100,8 +107,8 @@ public class TheFletchingTableModREIClient implements REIClientPlugin {
                             out.set(DataComponentTypes.POTION_CONTENTS, comp);
 
                             registry.add(new FletchingTableDisplay(
-                                    List.of(inArrow, EntryIngredient.of(EntryStacks.of(splash))),
-                                    List.of(EntryIngredient.of(EntryStacks.of(out)))
+                                List.of(inArrow, EntryIngredient.of(EntryStacks.of(splash))),
+                                List.of(EntryIngredient.of(EntryStacks.of(out)))
                             ));
                         }
                     }
@@ -117,8 +124,8 @@ public class TheFletchingTableModREIClient implements REIClientPlugin {
                             out.set(DataComponentTypes.POTION_CONTENTS, comp);
 
                             registry.add(new FletchingTableDisplay(
-                                    List.of(inArrow, EntryIngredient.of(EntryStacks.of(lingering))),
-                                    List.of(EntryIngredient.of(EntryStacks.of(out)))
+                                List.of(inArrow, EntryIngredient.of(EntryStacks.of(lingering))),
+                                List.of(EntryIngredient.of(EntryStacks.of(out)))
                             ));
                         }
                     }
@@ -128,7 +135,6 @@ public class TheFletchingTableModREIClient implements REIClientPlugin {
             }
         );
     }
-
 
     @Override
     public void registerScreens(ScreenRegistry registry) {
