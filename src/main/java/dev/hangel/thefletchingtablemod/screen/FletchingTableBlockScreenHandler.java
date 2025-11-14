@@ -48,8 +48,8 @@ public class FletchingTableBlockScreenHandler extends ScreenHandler {
             }
             @Override public boolean isValid(int slot, ItemStack stack) {
                 return switch (slot) {
-                    case ARROW_SLOT  -> stack.isOf(Items.ARROW);
-                    case POTION_SLOT -> stack.isOf(Items.POTION) || stack.isOf(Items.SPLASH_POTION) || stack.isOf(Items.LINGERING_POTION);
+                    case ARROW_SLOT  -> isArrowInput(stack);
+                    case POTION_SLOT -> isPotionInput(stack);
                     default -> false;
                 };
             }
@@ -61,15 +61,13 @@ public class FletchingTableBlockScreenHandler extends ScreenHandler {
         this.addSlot(new Slot(this.inventory, ARROW_SLOT,  25, 34) {
             @Override
             public boolean canInsert(ItemStack stack) {
-                return stack.isOf(Items.ARROW);
+                return isArrowInput(stack);
             }
         });
 
         this.addSlot(new Slot(this.inventory, POTION_SLOT,  78, 34) {
             @Override public boolean canInsert(ItemStack stack) {
-                return stack.isOf(Items.POTION)
-                    || stack.isOf(Items.SPLASH_POTION)
-                    || stack.isOf(Items.LINGERING_POTION);
+                return isPotionInput(stack);
             }
         });
 
@@ -92,6 +90,30 @@ public class FletchingTableBlockScreenHandler extends ScreenHandler {
 
         this.addPlayerInventory(playerInventory);
         this.addPlayerHotbar(playerInventory);
+    }
+
+    private boolean isArrowInput(ItemStack stack) {
+        if (stack.isEmpty() || opener.getWorld() == null) return false;
+
+        for (RecipeEntry<FletchingTableRecipe> entry :
+                opener.getWorld().getRecipeManager().listAllOfType(TheFletchingTableMod.FLETCHING_TABLE_RECIPE_TYPE)) {
+            if (entry.value().arrowInput().test(stack)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isPotionInput(ItemStack stack) {
+        if (stack.isEmpty() || opener.getWorld() == null) return false;
+
+        for (RecipeEntry<FletchingTableRecipe> entry :
+                opener.getWorld().getRecipeManager().listAllOfType(TheFletchingTableMod.FLETCHING_TABLE_RECIPE_TYPE)) {
+            if (entry.value().potionInput().test(stack)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void craftLogic() {
