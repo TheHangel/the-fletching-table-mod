@@ -49,7 +49,9 @@ public class FletchingTableBlockScreen extends HandledScreen<FletchingTableBlock
 
         Sprite tippedArrowSpriteHead = atlas.getSprite(Identifier.ofVanilla("item/tipped_arrow_head"));
 
-        context.drawSprite(x + 25, y + 34, 0, 16, 16, arrowSprite);
+        if(this.handler.getSlot(0).getStack().isEmpty()) {
+            context.drawSprite(x + 25, y + 34, 0, 16, 16, arrowSprite);
+        }
 
         long time = client.world != null ? client.world.getTime() : 0;
 
@@ -63,10 +65,14 @@ public class FletchingTableBlockScreen extends HandledScreen<FletchingTableBlock
             default -> current = lingeringPotionSprite;
         }
 
-        context.drawSprite(x + 78, y + 34, 0, 16, 16, current);
+        if(this.handler.getSlot(1).getStack().isEmpty()) {
+            context.drawSprite(x + 78, y + 34, 0, 16, 16, current);
+        }
 
-        context.drawSprite(x + 132, y + 34, 0, 16, 16, tippedArrowSpriteBase);
-        context.drawSprite(x + 132, y + 34, 0, 16, 16, tippedArrowSpriteHead);
+        if(this.handler.getSlot(2).getStack().isEmpty()) {
+            context.drawSprite(x + 132, y + 34, 0, 16, 16, tippedArrowSpriteBase);
+            context.drawSprite(x + 132, y + 34, 0, 16, 16, tippedArrowSpriteHead);
+        }
 
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
     }
