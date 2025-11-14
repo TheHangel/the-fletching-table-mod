@@ -3,6 +3,7 @@ package dev.hangel.thefletchingtablemod.screen;
 import dev.hangel.thefletchingtablemod.TheFletchingTableMod;
 import dev.hangel.thefletchingtablemod.recipe.FletchingTableRecipe;
 import dev.hangel.thefletchingtablemod.recipe.FletchingTableRecipeInput;
+import net.minecraft.block.Blocks;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.entity.player.PlayerEntity;
@@ -13,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.ItemScatterer;
@@ -27,10 +29,15 @@ public class FletchingTableBlockScreenHandler extends ScreenHandler {
 
     private final BlockPos pos;
     private final PlayerEntity opener;
+    private final ScreenHandlerContext context;
 
     private boolean suppressCraft;
 
     public FletchingTableBlockScreenHandler(int syncId, PlayerInventory playerInventory, BlockPos pos) {
+        this(syncId, playerInventory, pos, ScreenHandlerContext.create(playerInventory.player.getWorld(), pos));
+    }
+
+    public FletchingTableBlockScreenHandler(int syncId, PlayerInventory playerInventory, BlockPos pos, ScreenHandlerContext context) {
         super(TheFletchingTableMod.FLETCHING_TABLE_SCREEN_HANDLER, syncId);
         this.inventory = new SimpleInventory(3) {
             @Override public void markDirty() {
@@ -49,6 +56,7 @@ public class FletchingTableBlockScreenHandler extends ScreenHandler {
         };
         this.pos = pos;
         this.opener = playerInventory.player;
+        this.context = context;
 
         this.addSlot(new Slot(this.inventory, ARROW_SLOT,  25, 34) {
             @Override
@@ -192,6 +200,6 @@ public class FletchingTableBlockScreenHandler extends ScreenHandler {
 
     @Override
     public boolean canUse(PlayerEntity player) {
-        return true;
+        return canUse(context, opener, Blocks.FLETCHING_TABLE);
     }
 }
