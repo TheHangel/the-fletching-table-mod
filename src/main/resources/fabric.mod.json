@@ -3,16 +3,16 @@
 	"id": "the_fletching_table_mod",
 	"version": "${version}",
 	"name": "The Fletching Table Mod",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "This mod makes useful the unused Fletching Table block!",
 	"authors": [
-		"Me!"
+		"The_Hangel"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://www.hangel.dev/",
+		"sources": "https://github.com/TheHangel/the-fletching-table-mod"
 	},
 	"license": "ALR",
-	"icon": "assets/the_fletching_table_mod/icon.png",
+	"icon": "assets/the_fletching_table_mod/logo.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
