@@ -51,11 +51,17 @@ public class TheFletchingTableModREIClient implements REIClientPlugin {
                 boolean allowSplash    = Arrays.stream(potionBases).anyMatch(s -> s.isOf(Items.SPLASH_POTION));
                 boolean allowLingering = Arrays.stream(potionBases).anyMatch(s -> s.isOf(Items.LINGERING_POTION));
 
-                if (!allowNormal && !allowSplash && !allowLingering) {
-                    return null;
-                }
-
                 EntryIngredient inArrow = EntryIngredients.ofIngredient(arrowIng);
+
+                if (!allowNormal && !allowSplash && !allowLingering) {
+                    registry.add(new FletchingTableDisplay(
+                        List.of(
+                            inArrow,
+                            EntryIngredients.ofIngredient(potionIng)
+                        ),
+                        List.of(EntryIngredients.of(recipe.output()))
+                    ));
+                }
 
                 for (Potion potion : Registries.POTION) {
                     Identifier id = Registries.POTION.getId(potion);
