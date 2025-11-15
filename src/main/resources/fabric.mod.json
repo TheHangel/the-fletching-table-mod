@@ -7,13 +7,14 @@
 	"authors": [
 		"The_Hangel"
 	],
-	"credits": [
+	"contributors": [
 		"Juuz",
 		"Kaupenjoe"
 	],
 	"contact": {
 		"homepage": "https://www.hangel.dev/",
-		"sources": "https://github.com/TheHangel/the-fletching-table-mod"
+		"sources": "https://github.com/TheHangel/the-fletching-table-mod",
+		"issues": "https://github.com/TheHangel/the-fletching-table-mod/issues"
 	},
 	"license": "ALR",
 	"icon": "assets/the_fletching_table_mod/logo.png",
