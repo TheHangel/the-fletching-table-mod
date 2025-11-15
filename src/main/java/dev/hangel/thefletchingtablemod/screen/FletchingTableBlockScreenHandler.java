@@ -46,13 +46,6 @@ public class FletchingTableBlockScreenHandler extends ScreenHandler {
                     craftLogic();
                 }
             }
-            @Override public boolean isValid(int slot, ItemStack stack) {
-                return switch (slot) {
-                    case ARROW_SLOT  -> isArrowInput(stack);
-                    case POTION_SLOT -> isPotionInput(stack);
-                    default -> false;
-                };
-            }
         };
         this.pos = pos;
         this.opener = playerInventory.player;

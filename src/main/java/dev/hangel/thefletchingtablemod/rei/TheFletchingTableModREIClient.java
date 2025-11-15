@@ -8,6 +8,7 @@ import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
 import me.shedaniel.rei.api.client.registry.screen.ScreenRegistry;
+import me.shedaniel.rei.api.client.registry.transfer.TransferHandlerRegistry;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.util.EntryIngredients;
 import me.shedaniel.rei.api.common.util.EntryStacks;
@@ -144,5 +145,10 @@ public class TheFletchingTableModREIClient implements REIClientPlugin {
             FletchingTableBlockScreen.class,
             FletchingTableCategory.FLETCHING_TABLE_DISPLAY_CATEGORY
         );
+    }
+
+    @Override
+    public void registerTransferHandlers(TransferHandlerRegistry registry) {
+        registry.register(new FletchingTableTransferHandler());
     }
 }
