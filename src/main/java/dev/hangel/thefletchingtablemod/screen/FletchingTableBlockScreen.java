@@ -2,12 +2,17 @@ package dev.hangel.thefletchingtablemod.screen;
 
 import dev.hangel.thefletchingtablemod.TheFletchingTableMod;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.InventoryMenu;
+import org.jetbrains.annotations.NotNull;
 
 public class FletchingTableBlockScreen extends AbstractContainerScreen<FletchingTableBlockMenu> {
     public static final ResourceLocation GUI_TEXTURE =
@@ -26,56 +31,56 @@ public class FletchingTableBlockScreen extends AbstractContainerScreen<Fletching
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
 
-        //MinecraftClient client = MinecraftClient.getInstance();
-        //SpriteAtlasTexture atlas  = client.getBakedModelManager().getAtlas(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE);
+        Minecraft client = Minecraft.getInstance();
+        TextureAtlas atlas  = client.getModelManager().getAtlas(InventoryMenu.BLOCK_ATLAS);
 
         context.blit(GUI_TEXTURE, x, y, 0, 0, imageWidth, imageHeight);
 
-        /*RenderSystem.setShaderColor(0.0f, 0.0f, 0.0f, 1.0f);
+        RenderSystem.setShaderColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-        Sprite arrowSprite = atlas.getSprite(Identifier.ofVanilla("item/arrow"));
+        TextureAtlasSprite arrowSprite = atlas.getSprite(ResourceLocation.parse("item/arrow"));
 
-        Sprite potionSprite = atlas.getSprite(Identifier.ofVanilla("item/potion"));
+        TextureAtlasSprite potionSprite = atlas.getSprite(ResourceLocation.parse("item/potion"));
 
-        Sprite splashPotionSprite = atlas.getSprite(Identifier.ofVanilla("item/splash_potion"));
+        TextureAtlasSprite splashPotionSprite = atlas.getSprite(ResourceLocation.parse("item/splash_potion"));
 
-        Sprite lingeringPotionSprite = atlas.getSprite(Identifier.ofVanilla("item/lingering_potion"));
+        TextureAtlasSprite lingeringPotionSprite = atlas.getSprite(ResourceLocation.parse("item/lingering_potion"));
 
-        Sprite tippedArrowSpriteBase = atlas.getSprite(Identifier.ofVanilla("item/tipped_arrow_base"));
+        TextureAtlasSprite tippedArrowSpriteBase = atlas.getSprite(ResourceLocation.parse("item/tipped_arrow_base"));
 
-        Sprite tippedArrowSpriteHead = atlas.getSprite(Identifier.ofVanilla("item/tipped_arrow_head"));
+        TextureAtlasSprite tippedArrowSpriteHead = atlas.getSprite(ResourceLocation.parse("item/tipped_arrow_head"));
 
-        if(this.handler.getSlot(0).getStack().isEmpty()) {
-            context.drawSprite(x + 25, y + 34, 0, 16, 16, arrowSprite);
+        if(this.menu.getSlot(0).getItem().isEmpty()) {
+            context.blit(x + 25, y + 34, 0, 16, 16, arrowSprite);
         }
 
-        long time = client.world != null ? client.world.getTime() : 0;
+        long time = client.level != null ? client.level.getGameTime() : 0;
 
         int periodTicks = 20;
         int index = (int) ((time / periodTicks) % 3);
 
-        Sprite current;
+        TextureAtlasSprite current;
         switch (index) {
             case 0 -> current = potionSprite;
             case 1 -> current = splashPotionSprite;
             default -> current = lingeringPotionSprite;
         }
 
-        if(this.handler.getSlot(1).getStack().isEmpty()) {
-            context.drawSprite(x + 78, y + 34, 0, 16, 16, current);
+        if(this.menu.getSlot(1).getItem().isEmpty()) {
+            context.blit(x + 78, y + 34, 0, 16, 16, current);
         }
 
-        if(this.handler.getSlot(2).getStack().isEmpty()) {
-            context.drawSprite(x + 132, y + 34, 0, 16, 16, tippedArrowSpriteBase);
-            context.drawSprite(x + 132, y + 34, 0, 16, 16, tippedArrowSpriteHead);
+        if(this.menu.getSlot(2).getItem().isEmpty()) {
+            context.blit(x + 132, y + 34, 0, 16, 16, tippedArrowSpriteBase);
+            context.blit(x + 132, y + 34, 0, 16, 16, tippedArrowSpriteHead);
         }
 
-        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);*/
+        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
     }
 
-    /*@Override
-    public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
+    @Override
+    public void render(@NotNull GuiGraphics context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
-        drawMouseoverTooltip(context, mouseX, mouseY);
-    }*/
+        renderTooltip(context, mouseX, mouseY);
+    }
 }
