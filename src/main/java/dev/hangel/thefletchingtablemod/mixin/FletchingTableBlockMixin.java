@@ -1,6 +1,6 @@
-package com.example.examplemod.mixin;
+package dev.hangel.thefletchingtablemod.mixin;
 
-import com.example.examplemod.screen.FletchingTableBlockMenu;
+import dev.hangel.thefletchingtablemod.screen.FletchingTableBlockMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(FletchingTableBlock.class)
-public class ExampleMixin {
+public class FletchingTableBlockMixin {
     @Inject(method = "useWithoutItem", at = @At("HEAD"), cancellable = true)
     private void theFletchingTableMod$openGui(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult blockHitResult, CallbackInfoReturnable<InteractionResult> cir) {
         if (level.isClientSide()) {

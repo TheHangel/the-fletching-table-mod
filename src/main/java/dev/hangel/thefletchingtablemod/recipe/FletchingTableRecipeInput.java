@@ -1,4 +1,4 @@
-package com.example.examplemod.recipe;
+package dev.hangel.thefletchingtablemod.recipe;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeInput;

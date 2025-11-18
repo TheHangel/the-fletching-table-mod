@@ -1,6 +1,6 @@
-package com.example.examplemod.screen;
+package dev.hangel.thefletchingtablemod.screen;
 
-import com.example.examplemod.ExampleMod;
+import dev.hangel.thefletchingtablemod.TheFletchingTableMod;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -11,7 +11,7 @@ import net.minecraft.world.entity.player.Inventory;
 
 public class FletchingTableBlockScreen extends AbstractContainerScreen<FletchingTableBlockMenu> {
     public static final ResourceLocation GUI_TEXTURE =
-            ResourceLocation.fromNamespaceAndPath(ExampleMod.MOD_ID, "textures/gui/fletching_table_gui.png");
+            ResourceLocation.fromNamespaceAndPath(TheFletchingTableMod.MOD_ID, "textures/gui/fletching_table_gui.png");
 
     public FletchingTableBlockScreen(FletchingTableBlockMenu handler, Inventory inventory, Component title) {
         super(handler, inventory, title);

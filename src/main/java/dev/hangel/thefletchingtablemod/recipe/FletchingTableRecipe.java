@@ -1,6 +1,6 @@
-package com.example.examplemod.recipe;
+package dev.hangel.thefletchingtablemod.recipe;
 
-import com.example.examplemod.ExampleMod;
+import dev.hangel.thefletchingtablemod.TheFletchingTableMod;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderLookup;
@@ -51,12 +51,12 @@ public record FletchingTableRecipe(Ingredient arrowInput, Ingredient potionInput
     @Override
     public @NotNull RecipeSerializer<?> getSerializer() {
         // En Forge ça sera un RegistryObject, donc `.get()`
-        return ExampleMod.FLETCHING_TABLE_RECIPE_SERIALIZER.get();
+        return TheFletchingTableMod.FLETCHING_TABLE_RECIPE_SERIALIZER.get();
     }
 
     @Override
     public @NotNull RecipeType<?> getType() {
-        return ExampleMod.FLETCHING_TABLE_RECIPE_TYPE.get();
+        return TheFletchingTableMod.FLETCHING_TABLE_RECIPE_TYPE.get();
     }
 
     // -------- Serializer Forge 1.21.1 --------

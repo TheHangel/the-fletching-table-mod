@@ -1,5 +1,5 @@
 {
-  "type": "examplemod:fletching_table",
+  "type": "the_fletching_table_mod:fletching_table",
   "arrow": {
     "item": "minecraft:arrow"
   },

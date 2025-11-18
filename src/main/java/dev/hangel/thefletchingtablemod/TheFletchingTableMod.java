@@ -1,12 +1,11 @@
-package com.example.examplemod;
+package dev.hangel.thefletchingtablemod;
 
-import com.example.examplemod.recipe.FletchingTableRecipe;
-import com.example.examplemod.screen.FletchingTableBlockMenu;
-import com.example.examplemod.screen.FletchingTableBlockScreen;
+import dev.hangel.thefletchingtablemod.recipe.FletchingTableRecipe;
+import dev.hangel.thefletchingtablemod.screen.FletchingTableBlockMenu;
+import dev.hangel.thefletchingtablemod.screen.FletchingTableBlockScreen;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -25,18 +24,17 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 
-@Mod(ExampleMod.MOD_ID)
-public class ExampleMod
+@Mod(TheFletchingTableMod.MOD_ID)
+public class TheFletchingTableMod
 {
-    public static final String MOD_ID = "examplemod";
+    public static final String MOD_ID = "the_fletching_table_mod";
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public static final DeferredRegister<MenuType<?>> MENUS =
-            DeferredRegister.create(ForgeRegistries.MENU_TYPES, ExampleMod.MOD_ID);
+            DeferredRegister.create(ForgeRegistries.MENU_TYPES, TheFletchingTableMod.MOD_ID);
 
     public static final RegistryObject<MenuType<FletchingTableBlockMenu>> FLETCHING_TABLE_MENU =
             MENUS.register("fletching_table",
-                    // ctor côté client : (int id, Inventory inv, FriendlyByteBuf buf)
                     () -> IForgeMenuType.create(FletchingTableBlockMenu::new)
             );
 
@@ -54,15 +52,13 @@ public class ExampleMod
                     () -> RecipeType.simple(ResourceLocation.fromNamespaceAndPath(MOD_ID, "fletching_table"))
             );
 
-    public ExampleMod(FMLJavaModLoadingContext context)
+    public TheFletchingTableMod(FMLJavaModLoadingContext context)
     {
         IEventBus modEventBus = context.getModEventBus();
 
         modEventBus.addListener(this::commonSetup);
 
         MinecraftForge.EVENT_BUS.register(this);
-
-        context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
         MENUS.register(modEventBus);
 

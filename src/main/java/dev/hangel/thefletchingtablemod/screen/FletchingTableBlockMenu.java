@@ -1,8 +1,8 @@
-package com.example.examplemod.screen;
+package dev.hangel.thefletchingtablemod.screen;
 
-import com.example.examplemod.ExampleMod;
-import com.example.examplemod.recipe.FletchingTableRecipe;
-import com.example.examplemod.recipe.FletchingTableRecipeInput;
+import dev.hangel.thefletchingtablemod.TheFletchingTableMod;
+import dev.hangel.thefletchingtablemod.recipe.FletchingTableRecipe;
+import dev.hangel.thefletchingtablemod.recipe.FletchingTableRecipeInput;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.FriendlyByteBuf;
@@ -33,7 +33,7 @@ public class FletchingTableBlockMenu extends AbstractContainerMenu {
     }
 
     public FletchingTableBlockMenu(int syncId, Inventory inv, BlockPos pos) {
-        super(ExampleMod.FLETCHING_TABLE_MENU.get(), syncId);
+        super(TheFletchingTableMod.FLETCHING_TABLE_MENU.get(), syncId);
         this.pos = pos;
         this.opener = inv.player;
 
@@ -89,7 +89,7 @@ public class FletchingTableBlockMenu extends AbstractContainerMenu {
         if (stack.isEmpty()) return false;
 
         for (RecipeHolder<FletchingTableRecipe> entry :
-                opener.level().getRecipeManager().getAllRecipesFor(ExampleMod.FLETCHING_TABLE_RECIPE_TYPE.get())) {
+                opener.level().getRecipeManager().getAllRecipesFor(TheFletchingTableMod.FLETCHING_TABLE_RECIPE_TYPE.get())) {
             if (entry.value().arrowInput().test(stack)) {
                 return true;
             }
@@ -101,7 +101,7 @@ public class FletchingTableBlockMenu extends AbstractContainerMenu {
         if (stack.isEmpty()) return false;
 
         for (RecipeHolder<FletchingTableRecipe> entry :
-                opener.level().getRecipeManager().getAllRecipesFor(ExampleMod.FLETCHING_TABLE_RECIPE_TYPE.get())) {
+                opener.level().getRecipeManager().getAllRecipesFor(TheFletchingTableMod.FLETCHING_TABLE_RECIPE_TYPE.get())) {
             if (entry.value().potionInput().test(stack)) {
                 return true;
             }
@@ -151,7 +151,7 @@ public class FletchingTableBlockMenu extends AbstractContainerMenu {
     }
 
     private Optional<RecipeHolder<FletchingTableRecipe>> getCurrentRecipe() {
-        return this.opener.level().getRecipeManager().getRecipeFor(ExampleMod.FLETCHING_TABLE_RECIPE_TYPE.get(), new FletchingTableRecipeInput(inventory.getItem(ARROW_SLOT), inventory.getItem(POTION_SLOT)), this.opener.level());
+        return this.opener.level().getRecipeManager().getRecipeFor(TheFletchingTableMod.FLETCHING_TABLE_RECIPE_TYPE.get(), new FletchingTableRecipeInput(inventory.getItem(ARROW_SLOT), inventory.getItem(POTION_SLOT)), this.opener.level());
     }
 
     @Override
