@@ -1,0 +1,12 @@
+{
+  "type": "examplemod:fletching_table",
+  "arrow": {
+    "item": "minecraft:arrow"
+  },
+  "potion": {
+    "item": "minecraft:potion"
+  },
+  "result": {
+    "id": "minecraft:tipped_arrow"
+  }
+}
