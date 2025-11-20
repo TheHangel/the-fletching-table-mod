@@ -44,7 +44,7 @@ public record FletchingTableRecipe(Ingredient arrowInput, Ingredient potionInput
     }
 
     @Override
-    public @NotNull ItemStack getResultItem(HolderLookup.@NotNull Provider registriesLookup) {
+    public @NotNull ItemStack getResultItem(HolderLookup.Provider registriesLookup) {
         return output;
     }
 
