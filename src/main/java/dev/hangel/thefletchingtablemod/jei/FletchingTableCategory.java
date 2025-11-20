@@ -55,8 +55,8 @@ public class FletchingTableCategory implements IRecipeCategory<FletchingTableRec
 
     @Override
     public void setRecipe(@NotNull IRecipeLayoutBuilder builder, @NotNull FletchingTableRecipe recipe, @NotNull IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 25, 34).addIngredients(recipe.getIngredients().get(0));
-        builder.addSlot(RecipeIngredientRole.INPUT, 78, 34).addIngredients(recipe.getIngredients().get(1));
+        builder.addSlot(RecipeIngredientRole.INPUT, 25, 34).addIngredients(recipe.arrowInput());
+        builder.addSlot(RecipeIngredientRole.INPUT, 78, 34).addIngredients(recipe.potionInput());
 
         builder.addSlot(RecipeIngredientRole.OUTPUT, 132, 34).addItemStack(recipe.getResultItem(null));
     }
