@@ -160,7 +160,7 @@ dependencies {
 
 mixin {
     // MixinGradle Settings
-    add sourceSets.main, 'mixins.mymod.refmap.json'
+    add sourceSets.main, 'mixins.the_fletching_table_mod.refmap.json'
     config 'the-fletching-table-mod.mixins.json'
 }
 

@@ -2,6 +2,7 @@
   "required": true,
   "package": "dev.hangel.thefletchingtablemod.mixin",
   "compatibilityLevel": "JAVA_21",
+  "refmap": "mixins.the_fletching_table_mod.refmap.json",
   "mixins": [
     "FletchingTableBlockMixin"
   ],
