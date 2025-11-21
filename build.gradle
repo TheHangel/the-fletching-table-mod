@@ -3,7 +3,6 @@ plugins {
     id 'idea'
     id 'maven-publish'
     id 'net.minecraftforge.gradle' version '[6.0.24,6.2)'
-    id 'org.spongepowered.mixin' version '0.7.+'
 }
 
 version = mod_version
@@ -156,12 +155,6 @@ dependencies {
     compileOnly("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
     // at runtime, use the full JEI jar for Forge
     runtimeOnly("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
-}
-
-mixin {
-    // MixinGradle Settings
-    add sourceSets.main, 'mixins.the_fletching_table_mod.refmap.json'
-    config 'the-fletching-table-mod.mixins.json'
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
