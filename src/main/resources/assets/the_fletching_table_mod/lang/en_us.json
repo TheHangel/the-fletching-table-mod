@@ -1,0 +1,13 @@
+{
+  "itemGroup.the_fletching_table_mod": "Example Mod Tab",
+  "block.the_fletching_table_mod.example_block": "Example Block",
+  "item.the_fletching_table_mod.example_item": "Example Item",
+
+  "the_fletching_table_mod.configuration.title": "The Fletching Table Mod Configs",
+  "the_fletching_table_mod.configuration.section.the_fletching_table_mod.common.toml": "The Fletching Table Mod Configs",
+  "the_fletching_table_mod.configuration.section.the_fletching_table_mod.common.toml.title": "The Fletching Table Mod Configs",
+  "the_fletching_table_mod.configuration.items": "Item List",
+  "the_fletching_table_mod.configuration.logDirtBlock": "Log Dirt Block",
+  "the_fletching_table_mod.configuration.magicNumberIntroduction": "Magic Number Text",
+  "the_fletching_table_mod.configuration.magicNumber": "Magic Number"
+}
