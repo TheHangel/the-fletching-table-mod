@@ -25,40 +25,37 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class FletchingTableBlockMixin {
 
     @Inject(
-            method = "use",
-            at = @At("HEAD"),
-            cancellable = true
+        method = "use",
+        at = @At("HEAD"),
+        cancellable = true
     )
-    private void thefletchingtablemod$openCustomGui(
-            BlockState state,
-            World world,
-            BlockPos pos,
-            PlayerEntity player,
-            Hand hand,
-            BlockRayTraceResult hit,
-            CallbackInfoReturnable<ActionResultType> cir
+    private void FletchingTableBlock$use(
+        BlockState state,
+        World world,
+        BlockPos pos,
+        PlayerEntity player,
+        Hand hand,
+        BlockRayTraceResult hit,
+        CallbackInfoReturnable<ActionResultType> cir
     ) {
-        System.out.println("[FT] Mixin FletchingTableBlock#use HIT");
-        // vanilla: côté client on renvoie SUCCESS pour animation main
         if (world.isClientSide) {
             cir.setReturnValue(ActionResultType.SUCCESS);
             return;
         }
 
-        // côté serveur : open GUI
         NetworkHooks.openGui((ServerPlayerEntity) player,
-                new INamedContainerProvider() {
-                    @Override
-                    public ITextComponent getDisplayName() {
-                        return new TranslationTextComponent("block.minecraft.fletching_table");
-                    }
+            new INamedContainerProvider() {
+                @Override
+                public ITextComponent getDisplayName() {
+                    return new TranslationTextComponent("block.minecraft.fletching_table");
+                }
 
-                    @Override
-                    public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity p) {
-                        return new FletchingTableContainer(windowId, world, pos, inv, p);
-                    }
-                },
-                (buf) -> buf.writeBlockPos(pos)
+                @Override
+                public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity p) {
+                    return new FletchingTableContainer(windowId, world, pos, inv, p);
+                }
+            },
+            (buf) -> buf.writeBlockPos(pos)
         );
 
         cir.setReturnValue(ActionResultType.CONSUME);
