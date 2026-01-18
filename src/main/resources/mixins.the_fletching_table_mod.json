@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "dev.hangel.thefletchingtablemod.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "the_fletching_table_mod.refmap.json",
+  "mixins": [
+    "FletchingTableBlockMixin"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
