@@ -15,7 +15,7 @@ public class FletchingTableInputSlot extends Slot {
     @Override
     public void set(ItemStack stack) {
         super.set(stack);
-        container.updateResultServer(); // recalcul même si juste count/merge
+        container.updateResultServer();
     }
 
     @Override
