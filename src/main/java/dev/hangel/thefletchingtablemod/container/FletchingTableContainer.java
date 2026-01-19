@@ -99,16 +99,11 @@ public class FletchingTableContainer extends Container {
 
         ItemStack out = recipe.assemble(inputInventory);
 
-        // 1) COUNT
-        // - si recipe JSON a count: on respecte
-        // - sinon: count = nombre de flèches dans slot0 (comme ton 1.21.1)
         int jsonCount = recipe.getResultCountFromJson();
         int countToSet = (jsonCount > 0) ? jsonCount : arrows.getCount();
 
-        // sécurité : pas > stack max + pas <=0
         countToSet = Math.max(0, Math.min(countToSet, out.getMaxStackSize()));
 
-        // si pas de flèches -> pas d’output
         if (countToSet <= 0) {
             outputInventory.setItem(0, ItemStack.EMPTY);
             return;
@@ -116,7 +111,6 @@ public class FletchingTableContainer extends Container {
 
         out.setCount(countToSet);
 
-        // 2) POTION -> TIPPED ARROW NBT
         if (!potionStack.isEmpty() && out.getItem() == Items.TIPPED_ARROW) {
             Potion potionType = PotionUtils.getPotion(potionStack);
             if (potionType != null) PotionUtils.setPotion(out, potionType);
@@ -133,19 +127,9 @@ public class FletchingTableContainer extends Container {
     void updateResultServer() {
         if (!this.world.isClientSide) {
             updateResult();
-            // force sync visuel : ton tag NBT est OK pour 1.16.5
             super.broadcastChanges();
         }
     }
-
-    /*@Override
-    public void broadcastChanges() {
-        // recalcul serveur (évite boucle)
-        if (!this.world.isClientSide) {
-            updateResult();
-        }
-        super.broadcastChanges();
-    }*/
 
     private boolean isArrowInput(World world, ItemStack stack) {
         if (stack.isEmpty()) return false;
