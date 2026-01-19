@@ -20,10 +20,8 @@ public class FletchingTableOutputSlot extends Slot {
 
     @Override
     public ItemStack onTake(PlayerEntity player, ItemStack stack) {
-        // stack = ce que le joueur vient de prendre (donc count = output count)
         int toConsume = stack.getCount();
 
-        // slot0 = arrows, slot1 = potion
         ItemStack arrows = input.getItem(0);
         ItemStack potion = input.getItem(1);
 
