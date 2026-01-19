@@ -1,0 +1,32 @@
+{
+	"schemaVersion": 1,
+	"id": "the_fletching_table_mod",
+	"version": "${version}",
+	"name": "The Fletching Table Mod",
+	"description": "This mod makes useful the unused Fletching Table block!",
+	"authors": [
+		"The_Hangel"
+	],
+	"contact": {
+		"homepage": "https://www.hangel.dev",
+		"sources": "https://github.com/TheHangel/the-fletching-table-mod",
+		"issues": "https://github.com/TheHangel/the-fletching-table-mod/issues"
+	},
+	"license": "All Rights Reserved",
+	"icon": "logo.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"dev.hangel.thefletchingtablemod.TheFletchingTableMod"
+		]
+	},
+	"mixins": [
+		"the-fletching-table-mod.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.18.4",
+		"minecraft": "~1.16.5",
+		"java": ">=8",
+		"fabric": "*"
+	}
+}
