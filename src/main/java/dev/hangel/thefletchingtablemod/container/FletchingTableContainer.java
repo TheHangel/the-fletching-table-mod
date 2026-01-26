@@ -1,0 +1,213 @@
+package dev.hangel.thefletchingtablemod.container;
+
+import dev.hangel.thefletchingtablemod.TheFletchingTableMod;
+import dev.hangel.thefletchingtablemod.recipe.FletchingTableRecipe;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.Container;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.inventory.ResultContainer;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+
+import java.util.List;
+import java.util.Optional;
+
+public class FletchingTableContainer extends AbstractContainerMenu {
+    private final Level world;
+    private final BlockPos pos;
+    private final Player player;
+
+    private final CraftingContainer inputInventory = new CraftingContainer(this, 2, 1);
+    private final ResultContainer outputInventory = new ResultContainer();
+
+    public FletchingTableContainer(int syncId, Inventory inv, FriendlyByteBuf buf) {
+        this(syncId, inv.player.level, buf.readBlockPos(), inv, inv.player);
+    }
+
+    public FletchingTableContainer(int windowId, Level world, BlockPos pos, Inventory playerInv, Player player) {
+        super(TheFletchingTableMod.FLETCHING_TABLE_CONTAINER, windowId);
+        this.world = world;
+        this.pos = pos;
+        this.player = player;
+
+        this.addSlot(new FletchingTableInputSlot(this, inputInventory, 0, 25, 34) {
+            @Override
+            public boolean mayPlace(ItemStack stack) {
+                return isArrowInput(world, stack);
+            }
+        });
+        this.addSlot(new FletchingTableInputSlot(this, inputInventory, 1, 78, 34) {
+            @Override
+            public boolean mayPlace(ItemStack stack) {
+                return isPotionInput(world, stack);
+            }
+        });
+
+        this.addSlot(new FletchingTableOutputSlot(outputInventory, 0, 132, 34, inputInventory));
+
+        this.addPlayerInventory(playerInv);
+    }
+
+    private void addPlayerInventory(Inventory playerInv) {
+        for (int row = 0; row < 3; ++row) {
+            for (int col = 0; col < 9; ++col) {
+                this.addSlot(new Slot(playerInv, col + row * 9 + 9,
+                        8 + col * 18, 84 + row * 18));
+            }
+        }
+        for (int col = 0; col < 9; ++col) {
+            this.addSlot(new Slot(playerInv, col, 8 + col * 18, 142));
+        }
+    }
+
+    @Override
+    public boolean stillValid(Player playerIn) {
+        return this.world.getBlockState(pos).getBlock() == Blocks.FLETCHING_TABLE
+            && playerIn.distanceToSqr(pos.getX() + 0.5D,
+            pos.getY() + 0.5D,
+            pos.getZ() + 0.5D) <= 64.0D;
+    }
+
+    @Override
+    public void slotsChanged(Container inventoryIn) {
+        super.slotsChanged(inventoryIn);
+        updateResult();
+    }
+
+    private void updateResult() {
+        if (this.world.isClientSide) return;
+
+        Optional<FletchingTableRecipe> opt = this.world.getRecipeManager()
+                .getRecipeFor(FletchingTableRecipe.TYPE, inputInventory, this.world);
+
+        if (!opt.isPresent()) {
+            outputInventory.setItem(0, ItemStack.EMPTY);
+            return;
+        }
+
+        FletchingTableRecipe recipe = opt.get();
+
+        ItemStack arrows = inputInventory.getItem(0);
+        ItemStack potionStack = inputInventory.getItem(1);
+
+        ItemStack out = recipe.assemble(inputInventory);
+
+        int jsonCount = recipe.getResultCountFromJson();
+        int countToSet = (jsonCount > 0) ? jsonCount : arrows.getCount();
+
+        countToSet = Math.max(0, Math.min(countToSet, out.getMaxStackSize()));
+
+        if (countToSet <= 0) {
+            outputInventory.setItem(0, ItemStack.EMPTY);
+            return;
+        }
+
+        out.setCount(countToSet);
+
+        if (!potionStack.isEmpty() && out.getItem() == Items.TIPPED_ARROW) {
+            Potion potionType = PotionUtils.getPotion(potionStack);
+            if (potionType != null) PotionUtils.setPotion(out, potionType);
+
+            List<MobEffectInstance> custom = PotionUtils.getCustomEffects(potionStack);
+            if (!custom.isEmpty()) PotionUtils.setCustomEffects(out, custom);
+        }
+
+        out.getOrCreateTag().putInt("_ft_count", countToSet);
+
+        outputInventory.setItem(0, out);
+    }
+
+    void updateResultServer() {
+        if (!this.world.isClientSide) {
+            updateResult();
+            super.broadcastChanges();
+        }
+    }
+
+    private boolean isArrowInput(Level world, ItemStack stack) {
+        if (stack.isEmpty()) return false;
+
+        RecipeManager rm = world.getRecipeManager();
+        for (Recipe<?> r : rm.getRecipes()) {
+            if (r.getType() == FletchingTableRecipe.TYPE) {
+                FletchingTableRecipe fr = (FletchingTableRecipe) r;
+                if (fr.getArrowInput().test(stack)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean isPotionInput(Level world, ItemStack stack) {
+        if (stack.isEmpty()) return false;
+
+        RecipeManager rm = world.getRecipeManager();
+        for (Recipe<?> r : rm.getRecipes()) {
+            if (r.getType() == FletchingTableRecipe.TYPE) {
+                FletchingTableRecipe fr = (FletchingTableRecipe) r;
+                if (fr.getPotionInput().test(stack)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void removed(Player player) {
+        super.removed(player);
+        if (player.level.isClientSide()) return;
+
+        for (int slot = 0; slot < 2; slot++) {
+            ItemStack stack = inputInventory.getItem(slot);
+            if (stack.isEmpty()) continue;
+
+            ItemStack toGive = stack.copy();
+            inputInventory.setItem(slot, ItemStack.EMPTY);
+
+            player.inventory.placeItemBackInInventory(player.level, toGive);
+        }
+    }
+
+    @Override
+    public ItemStack quickMoveStack(Player playerIn, int index) {
+        ItemStack newStack = ItemStack.EMPTY;
+        Slot slot = this.slots.get(index);
+        if (!slot.hasItem()) return ItemStack.EMPTY;
+
+        ItemStack original = slot.getItem();
+        newStack = original.copy();
+
+        int containerSlots = 3;
+        int playerStart = containerSlots;
+        int hotbarEnd   = playerStart + 27 + 9;
+
+        if (index < containerSlots) {
+            if (!this.moveItemStackTo(original, playerStart, hotbarEnd, true)) return ItemStack.EMPTY;
+
+            if (index == 2) {
+                slot.onTake(player, newStack);
+            }
+        } else {
+            if (!this.moveItemStackTo(original, 0, containerSlots, false)) return ItemStack.EMPTY;
+        }
+
+        if (original.isEmpty()) slot.set(ItemStack.EMPTY);
+        else slot.setChanged();
+
+        return newStack;
+    }
+}

@@ -1,14 +1,14 @@
 {
-	"required": true,
-	"package": "dev.hangel.thefletchingtablemod.mixin",
-	"compatibilityLevel": "JAVA_8",
-	"mixins": [
-		"ExampleMixin"
-	],
-	"injectors": {
-		"defaultRequire": 1
-	},
-	"overwrites": {
-		"requireAnnotations": true
+  "required": true,
+  "package": "dev.hangel.thefletchingtablemod.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "FletchingTableBlockMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
 	}
 }

@@ -18,6 +18,9 @@
 	"entrypoints": {
 		"main": [
 			"dev.hangel.thefletchingtablemod.TheFletchingTableMod"
+		],
+		"client": [
+			"dev.hangel.thefletchingtablemod.TheFletchingTableModClient"
 		]
 	},
 	"mixins": [
