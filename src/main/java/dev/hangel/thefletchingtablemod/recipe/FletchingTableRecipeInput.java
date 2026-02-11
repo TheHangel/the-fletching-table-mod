@@ -14,7 +14,7 @@ public record FletchingTableRecipeInput(ItemStack arrowInput, ItemStack potionIn
     }
 
     @Override
-    public int getSize() {
+    public int size() {
         return 2;
     }
 }

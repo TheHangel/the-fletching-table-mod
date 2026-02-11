@@ -12,10 +12,12 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.RecipeEntry;
+import net.minecraft.recipe.ServerRecipeManager;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import java.util.Optional;
 
@@ -27,11 +29,12 @@ public class FletchingTableBlockScreenHandler extends ScreenHandler {
     private final BlockPos pos;
     private final PlayerEntity opener;
     private final ScreenHandlerContext context;
+    private final ServerRecipeManager serverRecipeManager;
 
     private boolean suppressCraft;
 
     public FletchingTableBlockScreenHandler(int syncId, PlayerInventory playerInventory, BlockPos pos) {
-        this(syncId, playerInventory, pos, ScreenHandlerContext.create(playerInventory.player.getWorld(), pos));
+        this(syncId, playerInventory, pos, ScreenHandlerContext.create(playerInventory.player.getEntityWorld(), pos));
     }
 
     public FletchingTableBlockScreenHandler(int syncId, PlayerInventory playerInventory, BlockPos pos, ScreenHandlerContext context) {
@@ -47,6 +50,13 @@ public class FletchingTableBlockScreenHandler extends ScreenHandler {
         this.pos = pos;
         this.opener = playerInventory.player;
         this.context = context;
+
+        World world = playerInventory.player.getEntityWorld();
+        if (world.getRecipeManager() instanceof ServerRecipeManager srm) {
+            this.serverRecipeManager = srm;
+        } else {
+            this.serverRecipeManager = null;
+        }
 
         this.addSlot(new Slot(this.inventory, ARROW_SLOT,  25, 34) {
             @Override
@@ -83,30 +93,36 @@ public class FletchingTableBlockScreenHandler extends ScreenHandler {
     }
 
     private boolean isArrowInput(ItemStack stack) {
-        if (stack.isEmpty() || opener.getWorld() == null) return false;
+        if (stack.isEmpty()) return false;
+        if (serverRecipeManager == null) return true;
 
-        for (RecipeEntry<FletchingTableRecipe> entry :
-                opener.getWorld().getRecipeManager().listAllOfType(TheFletchingTableMod.FLETCHING_TABLE_RECIPE_TYPE)) {
-            if (entry.value().arrowInput().test(stack)) {
-                return true;
+        for (RecipeEntry<?> entry : serverRecipeManager.values()) {
+            if (entry.value() instanceof FletchingTableRecipe recipe) {
+                if (recipe.arrowInput().test(stack)) {
+                    return true;
+                }
             }
         }
         return false;
     }
 
     private boolean isPotionInput(ItemStack stack) {
-        if (stack.isEmpty() || opener.getWorld() == null) return false;
+        if (stack.isEmpty()) return false;
+        if (serverRecipeManager == null) return true;
 
-        for (RecipeEntry<FletchingTableRecipe> entry :
-                opener.getWorld().getRecipeManager().listAllOfType(TheFletchingTableMod.FLETCHING_TABLE_RECIPE_TYPE)) {
-            if (entry.value().potionInput().test(stack)) {
-                return true;
+        for (RecipeEntry<?> entry : serverRecipeManager.values()) {
+            if (entry.value() instanceof FletchingTableRecipe recipe) {
+                if (recipe.potionInput().test(stack)) {
+                    return true;
+                }
             }
         }
         return false;
     }
 
     private void craftLogic() {
+        if (serverRecipeManager == null) return;
+
         if(this.hasRecipe()) {
             this.showTippedArrows();
         }
@@ -120,7 +136,7 @@ public class FletchingTableBlockScreenHandler extends ScreenHandler {
         if(recipe.isEmpty()) return;
 
         int count = this.inventory.getStack(ARROW_SLOT).getCount();
-        ItemStack tippedArrowsStack = recipe.get().value().output();
+        ItemStack tippedArrowsStack = recipe.get().value().output().copy();
         tippedArrowsStack.setCount(count);
 
         ItemStack potionStack = this.inventory.getStack(POTION_SLOT);
@@ -148,13 +164,15 @@ public class FletchingTableBlockScreenHandler extends ScreenHandler {
     }
 
     private Optional<RecipeEntry<FletchingTableRecipe>> getCurrentRecipe() {
-        return this.opener.getWorld().getRecipeManager().getFirstMatch(TheFletchingTableMod.FLETCHING_TABLE_RECIPE_TYPE, new FletchingTableRecipeInput(inventory.getStack(ARROW_SLOT), inventory.getStack(POTION_SLOT)), this.opener.getWorld());
+        if (serverRecipeManager == null) return Optional.empty();
+        World world = opener.getEntityWorld();
+        return serverRecipeManager.getFirstMatch(TheFletchingTableMod.FLETCHING_TABLE_RECIPE_TYPE, new FletchingTableRecipeInput(inventory.getStack(ARROW_SLOT), inventory.getStack(POTION_SLOT)), world);
     }
 
     @Override
     public void onClosed(PlayerEntity player) {
         super.onClosed(player);
-        if (player.getWorld().isClient()) return;
+        if (player.getEntityWorld().isClient()) return;
 
         for (int slot = 0; slot < 2; slot++) {
             ItemStack stack = inventory.getStack(slot);

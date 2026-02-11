@@ -31,6 +31,9 @@
 		],
 		"rei_client": [
 			"dev.hangel.thefletchingtablemod.rei.TheFletchingTableModREIClient"
+		],
+		"rei_common": [
+			"dev.hangel.thefletchingtablemod.rei.TheFletchingTableModREICommon"
 		]
 	},
 	"mixins": [
@@ -38,7 +41,7 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.17.3",
-		"minecraft": "~1.21.1",
+		"minecraft": "~1.21.11",
 		"java": ">=21",
 		"fabric-api": "*"
 	},

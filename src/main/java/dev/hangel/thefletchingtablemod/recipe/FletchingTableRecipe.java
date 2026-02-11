@@ -7,21 +7,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.recipe.IngredientPlacement;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
+import net.minecraft.recipe.book.RecipeBookCategory;
 import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 
 public record FletchingTableRecipe(Ingredient arrowInput, Ingredient potionInput, ItemStack output) implements Recipe<FletchingTableRecipeInput> {
-    @Override
-    public DefaultedList<Ingredient> getIngredients() {
-        DefaultedList<Ingredient> list = DefaultedList.of();
-        list.add(arrowInput);
-        list.add(potionInput);
-        return list;
-    }
 
     @Override
     public boolean matches(FletchingTableRecipeInput input, World world) {
@@ -34,29 +28,29 @@ public record FletchingTableRecipe(Ingredient arrowInput, Ingredient potionInput
     }
 
     @Override
-    public boolean fits(int width, int height) {
-        return false;
-    }
-
-    @Override
-    public ItemStack getResult(RegistryWrapper.WrapperLookup registriesLookup) {
-        return output;
-    }
-
-    @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<? extends Recipe<FletchingTableRecipeInput>> getSerializer() {
         return TheFletchingTableMod.FLETCHING_TABLE_RECIPE_SERIALIZER;
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<? extends Recipe<FletchingTableRecipeInput>> getType() {
         return TheFletchingTableMod.FLETCHING_TABLE_RECIPE_TYPE;
+    }
+
+    @Override
+    public IngredientPlacement getIngredientPlacement() {
+        return IngredientPlacement.NONE;
+    }
+
+    @Override
+    public RecipeBookCategory getRecipeBookCategory() {
+        return TheFletchingTableMod.FLETCHING_TABLE_RECIPE_BOOK_CATEGORY;
     }
 
     public static class Serializer implements RecipeSerializer<FletchingTableRecipe> {
         public static final MapCodec<FletchingTableRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
-            Ingredient.DISALLOW_EMPTY_CODEC.fieldOf("arrow").forGetter(FletchingTableRecipe::arrowInput),
-            Ingredient.DISALLOW_EMPTY_CODEC.fieldOf("potion").forGetter(FletchingTableRecipe::potionInput),
+            Ingredient.CODEC.fieldOf("arrow").forGetter(FletchingTableRecipe::arrowInput),
+            Ingredient.CODEC.fieldOf("potion").forGetter(FletchingTableRecipe::potionInput),
             ItemStack.CODEC.fieldOf("result").forGetter(FletchingTableRecipe::output)
         ).apply(inst, FletchingTableRecipe::new));
 
