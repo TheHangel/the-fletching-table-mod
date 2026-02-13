@@ -18,6 +18,7 @@ repositories {
 	// for more information about repositories.
 	maven { url "https://maven.shedaniel.me" }
 	maven { url "https://maven.architectury.dev" }
+	maven { url "https://cursemaven.com" }
 }
 
 fabricApi {
@@ -34,6 +35,8 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+	modImplementation "curse.maven:modmenu-308702:7441070"
 
 	modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:21.11.814"
 	modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:21.11.814"
