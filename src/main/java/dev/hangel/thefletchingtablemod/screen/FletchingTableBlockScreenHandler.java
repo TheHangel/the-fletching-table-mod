@@ -11,6 +11,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.recipe.ServerRecipeManager;
 import net.minecraft.screen.ScreenHandler;
@@ -93,30 +94,32 @@ public class FletchingTableBlockScreenHandler extends ScreenHandler {
 
     private boolean isArrowInput(ItemStack stack) {
         if (stack.isEmpty()) return false;
-        if (serverRecipeManager == null) return true;
-
-        for (RecipeEntry<?> entry : serverRecipeManager.values()) {
-            if (entry.value() instanceof FletchingTableRecipe recipe) {
-                if (recipe.arrowInput().test(stack)) {
-                    return true;
+        if (serverRecipeManager != null) {
+            for (RecipeEntry<?> entry : serverRecipeManager.values()) {
+                if (entry.value() instanceof FletchingTableRecipe recipe) {
+                    if (recipe.arrowInput().test(stack)) {
+                        return true;
+                    }
                 }
             }
+            return false;
         }
-        return false;
+        return stack.isOf(Items.ARROW);
     }
 
     private boolean isPotionInput(ItemStack stack) {
         if (stack.isEmpty()) return false;
-        if (serverRecipeManager == null) return true;
-
-        for (RecipeEntry<?> entry : serverRecipeManager.values()) {
-            if (entry.value() instanceof FletchingTableRecipe recipe) {
-                if (recipe.potionInput().test(stack)) {
-                    return true;
+        if (serverRecipeManager != null) {
+            for (RecipeEntry<?> entry : serverRecipeManager.values()) {
+                if (entry.value() instanceof FletchingTableRecipe recipe) {
+                    if (recipe.potionInput().test(stack)) {
+                        return true;
+                    }
                 }
             }
+            return false;
         }
-        return false;
+        return stack.isOf(Items.POTION) || stack.isOf(Items.SPLASH_POTION) || stack.isOf(Items.LINGERING_POTION);
     }
 
     private void craftLogic() {
@@ -204,7 +207,13 @@ public class FletchingTableBlockScreenHandler extends ScreenHandler {
                 slot.onTakeItem(player, newStack);
             }
         } else {
-            if (!this.insertItem(original, 0, containerSlots, false)) return ItemStack.EMPTY;
+            if (isArrowInput(original)) {
+                if (!this.insertItem(original, ARROW_SLOT, ARROW_SLOT + 1, false)) return ItemStack.EMPTY;
+            } else if (isPotionInput(original)) {
+                if (!this.insertItem(original, POTION_SLOT, POTION_SLOT + 1, false)) return ItemStack.EMPTY;
+            } else {
+                return ItemStack.EMPTY;
+            }
         }
 
         if (original.isEmpty()) slot.setStack(ItemStack.EMPTY);
