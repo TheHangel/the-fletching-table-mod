@@ -31,6 +31,9 @@
 		],
 		"rei_common": [
 			"dev.hangel.thefletchingtablemod.rei.TheFletchingTableModREICommon"
+		],
+		"jei_mod_plugin": [
+			"dev.hangel.thefletchingtablemod.jei.FletchingTableJEIPlugin"
 		]
 	},
 	"mixins": [
