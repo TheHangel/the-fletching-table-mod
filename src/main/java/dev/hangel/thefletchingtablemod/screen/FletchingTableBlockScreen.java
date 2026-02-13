@@ -42,8 +42,10 @@ public class FletchingTableBlockScreen extends HandledScreen<FletchingTableBlock
 
         Sprite tippedArrowSpriteHead = atlas.getSprite(Identifier.ofVanilla("item/tipped_arrow_head"));
 
+        int black = 0xFF000000;
+
         if(this.handler.getSlot(0).getStack().isEmpty()) {
-            context.drawSpriteStretched(RenderPipelines.GUI_TEXTURED, arrowSprite, x + 25, y + 34, 16, 16);
+            context.drawSpriteStretched(RenderPipelines.GUI_TEXTURED, arrowSprite, x + 25, y + 34, 16, 16, black);
         }
 
         long time = client.world != null ? client.world.getTime() : 0;
@@ -59,12 +61,12 @@ public class FletchingTableBlockScreen extends HandledScreen<FletchingTableBlock
         }
 
         if(this.handler.getSlot(1).getStack().isEmpty()) {
-            context.drawSpriteStretched(RenderPipelines.GUI_TEXTURED, current, x + 78, y + 34, 16, 16);
+            context.drawSpriteStretched(RenderPipelines.GUI_TEXTURED, current, x + 78, y + 34, 16, 16, black);
         }
 
         if(this.handler.getSlot(2).getStack().isEmpty()) {
-            context.drawSpriteStretched(RenderPipelines.GUI_TEXTURED, tippedArrowSpriteBase, x + 132, y + 34, 16, 16);
-            context.drawSpriteStretched(RenderPipelines.GUI_TEXTURED, tippedArrowSpriteHead, x + 132, y + 34, 16, 16);
+            context.drawSpriteStretched(RenderPipelines.GUI_TEXTURED, tippedArrowSpriteBase, x + 132, y + 34, 16, 16, black);
+            context.drawSpriteStretched(RenderPipelines.GUI_TEXTURED, tippedArrowSpriteHead, x + 132, y + 34, 16, 16, black);
         }
     }
 
