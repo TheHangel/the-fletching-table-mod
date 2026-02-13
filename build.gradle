@@ -19,6 +19,7 @@ repositories {
 	maven { url "https://maven.shedaniel.me" }
 	maven { url "https://maven.architectury.dev" }
 	maven { url "https://cursemaven.com" }
+	maven { url "https://maven.blamejared.com" }
 }
 
 fabricApi {
@@ -38,10 +39,15 @@ dependencies {
 
 	modImplementation "curse.maven:modmenu-308702:7441070"
 
+	// REI - compile only so REI integration code still compiles
 	modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:21.11.814"
-	modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:21.11.814"
+	// modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:21.11.814"
 	modApi "dev.architectury:architectury-fabric:19.0.1"
 	modApi "me.shedaniel.cloth:cloth-config-fabric:21.11.151"
+
+	// JEI
+	modCompileOnly "mezz.jei:jei-1.21.11-fabric-api:27.4.0.15"
+	modRuntimeOnly "mezz.jei:jei-1.21.11-fabric:27.4.0.15"
 }
 
 processResources {
