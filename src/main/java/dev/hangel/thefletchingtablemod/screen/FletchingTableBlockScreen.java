@@ -9,6 +9,7 @@ import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
+import net.minecraft.util.Atlases;
 import net.minecraft.util.Identifier;
 
 public class FletchingTableBlockScreen extends HandledScreen<FletchingTableBlockScreenHandler> {
@@ -25,7 +26,7 @@ public class FletchingTableBlockScreen extends HandledScreen<FletchingTableBlock
         int y = (height - backgroundHeight) / 2;
 
         MinecraftClient client = MinecraftClient.getInstance();
-        SpriteAtlasTexture atlas  = client.getAtlasManager().getAtlasTexture(Identifier.ofVanilla("blocks"));
+        SpriteAtlasTexture atlas  = client.getAtlasManager().getAtlasTexture(Atlases.ITEMS);
 
         context.drawTexture(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x, y, 0, 0, backgroundWidth, backgroundHeight, 256, 256);
 
