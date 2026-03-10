@@ -10,6 +10,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -31,7 +32,7 @@ public class TheFletchingTableMod {
     public static final DeferredRegister<MenuType<?>> MENUS =
             DeferredRegister.create(Registries.MENU, MOD_ID);
 
-    public static final DeferredHolder<MenuType<?>, MenuType<FletchingTableBlockMenu>> FLETCHING_TABLE_MENU =
+    public static final DeferredHolder<MenuType<?>, @NotNull MenuType<@NotNull FletchingTableBlockMenu>> FLETCHING_TABLE_MENU =
             MENUS.register("fletching_table",
                     () -> IMenuTypeExtension.create(
                             FletchingTableBlockMenu::new
@@ -44,18 +45,18 @@ public class TheFletchingTableMod {
     public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES =
             DeferredRegister.create(Registries.RECIPE_TYPE, MOD_ID);
 
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<FletchingTableRecipe>>
+    public static final DeferredHolder<RecipeSerializer<?>, @NotNull RecipeSerializer<@NotNull FletchingTableRecipe>>
             FLETCHING_TABLE_RECIPE_SERIALIZER =
             RECIPE_SERIALIZERS.register("fletching_table", FletchingTableRecipe.Serializer::new);
 
-    public static final DeferredHolder<RecipeType<?>, RecipeType<FletchingTableRecipe>>
+    public static final DeferredHolder<RecipeType<?>, @NotNull RecipeType<@NotNull FletchingTableRecipe>>
             FLETCHING_TABLE_RECIPE_TYPE =
             RECIPE_TYPES.register("fletching_table", RecipeType::simple);
 
     public static final DeferredRegister<RecipeBookCategory> RECIPE_BOOK_CATEGORIES =
             DeferredRegister.create(Registries.RECIPE_BOOK_CATEGORY, MOD_ID);
 
-    public static final DeferredHolder<RecipeBookCategory, RecipeBookCategory>
+    public static final DeferredHolder<RecipeBookCategory, @NotNull RecipeBookCategory>
             FLETCHING_TABLE_RECIPE_BOOK_CATEGORY =
             RECIPE_BOOK_CATEGORIES.register("fletching_table", RecipeBookCategory::new);
 

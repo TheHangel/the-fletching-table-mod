@@ -11,8 +11,9 @@ import net.minecraft.data.AtlasIds;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
+import org.jetbrains.annotations.NotNull;
 
-public class FletchingTableBlockScreen extends AbstractContainerScreen<FletchingTableBlockMenu> {
+public class FletchingTableBlockScreen extends AbstractContainerScreen<@NotNull FletchingTableBlockMenu> {
     public static final Identifier GUI_TEXTURE =
             Identifier.fromNamespaceAndPath(TheFletchingTableMod.MOD_ID, "textures/gui/fletching_table_gui.png");
 
@@ -64,7 +65,7 @@ public class FletchingTableBlockScreen extends AbstractContainerScreen<Fletching
     }
 
     @Override
-    public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
+    public void render(@NotNull GuiGraphics context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
         renderTooltip(context, mouseX, mouseY);
     }

@@ -34,7 +34,7 @@ public class FletchingTableBlockMixin {
             serverPlayer.openMenu(new MenuProvider() {
                 @Override public @NotNull Component getDisplayName() { return Component.translatable("block.minecraft.fletching_table"); }
                 @Override
-                public FletchingTableBlockMenu createMenu(int syncId, Inventory inv, Player p) {
+                public FletchingTableBlockMenu createMenu(int syncId, @NotNull Inventory inv, @NotNull Player p) {
                     return new FletchingTableBlockMenu(syncId, inv, pos);
                 }
             }, buf -> buf.writeBlockPos(pos));

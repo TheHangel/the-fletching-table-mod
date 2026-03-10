@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class FletchingTableRecipe implements Recipe<FletchingTableRecipeInput> {
+public class FletchingTableRecipe implements Recipe<@NotNull FletchingTableRecipeInput> {
 
     private final Ingredient arrowInput;
     private final Ingredient potionInput;
@@ -44,13 +44,13 @@ public class FletchingTableRecipe implements Recipe<FletchingTableRecipeInput> {
     }
 
     @Override
-    public boolean matches(FletchingTableRecipeInput input, Level level) {
+    public boolean matches(FletchingTableRecipeInput input, @NotNull Level level) {
         return arrowInput.test(input.getItem(0))
                 && potionInput.test(input.getItem(1));
     }
 
     @Override
-    public @NotNull ItemStack assemble(FletchingTableRecipeInput input, HolderLookup.Provider lookup) {
+    public @NotNull ItemStack assemble(FletchingTableRecipeInput input, HolderLookup.@NotNull Provider lookup) {
         return output.copy();
     }
 
@@ -60,7 +60,7 @@ public class FletchingTableRecipe implements Recipe<FletchingTableRecipeInput> {
     }
 
     @Override
-    public PlacementInfo placementInfo() {
+    public @NotNull PlacementInfo placementInfo() {
         if (this.info == null) {
             this.info = PlacementInfo.create(List.of(arrowInput, potionInput));
         }
@@ -68,21 +68,21 @@ public class FletchingTableRecipe implements Recipe<FletchingTableRecipeInput> {
     }
 
     @Override
-    public RecipeBookCategory recipeBookCategory() {
+    public @NotNull RecipeBookCategory recipeBookCategory() {
         return TheFletchingTableMod.FLETCHING_TABLE_RECIPE_BOOK_CATEGORY.get();
     }
 
     @Override
-    public @NotNull RecipeSerializer<FletchingTableRecipe> getSerializer() {
+    public @NotNull RecipeSerializer<@NotNull FletchingTableRecipe> getSerializer() {
         return TheFletchingTableMod.FLETCHING_TABLE_RECIPE_SERIALIZER.get();
     }
 
     @Override
-    public @NotNull RecipeType<FletchingTableRecipe> getType() {
+    public @NotNull RecipeType<@NotNull FletchingTableRecipe> getType() {
         return TheFletchingTableMod.FLETCHING_TABLE_RECIPE_TYPE.get();
     }
 
-    public static class Serializer implements RecipeSerializer<FletchingTableRecipe> {
+    public static class Serializer implements RecipeSerializer<@NotNull FletchingTableRecipe> {
         public static final MapCodec<FletchingTableRecipe> CODEC =
                 RecordCodecBuilder.mapCodec(inst -> inst.group(
                         Ingredient.CODEC.fieldOf("arrow").forGetter(FletchingTableRecipe::arrowInput),

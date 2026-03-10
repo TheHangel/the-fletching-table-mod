@@ -13,9 +13,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
@@ -42,7 +44,7 @@ public class FletchingTableBlockMenu extends AbstractContainerMenu {
             @Override
             public void setChanged() {
                 super.setChanged();
-                if (!suppressCraft) {
+                if (!suppressCraft && !opener.level().isClientSide()) {
                     craftLogic();
                 }
             }
@@ -50,26 +52,26 @@ public class FletchingTableBlockMenu extends AbstractContainerMenu {
 
         this.addSlot(new Slot(this.inventory, ARROW_SLOT, 25, 34) {
             @Override
-            public boolean mayPlace(ItemStack stack) {
+            public boolean mayPlace(@NotNull ItemStack stack) {
                 return isArrowInput(stack);
             }
         });
 
         this.addSlot(new Slot(this.inventory, POTION_SLOT, 78, 34) {
             @Override
-            public boolean mayPlace(ItemStack stack) {
+            public boolean mayPlace(@NotNull ItemStack stack) {
                 return isPotionInput(stack);
             }
         });
 
         this.addSlot(new Slot(this.inventory, TIPPED_ARROW_SLOT, 132, 34) {
             @Override
-            public boolean mayPlace(ItemStack stack) {
+            public boolean mayPlace(@NotNull ItemStack stack) {
                 return false;
             }
 
             @Override
-            public void onTake(Player player, ItemStack stack) {
+            public void onTake(@NotNull Player player, @NotNull ItemStack stack) {
                 super.onTake(player, stack);
 
                 int toConsume  = stack.getCount();
@@ -88,7 +90,7 @@ public class FletchingTableBlockMenu extends AbstractContainerMenu {
 
     private RecipeManager getRecipeManager() {
         if (opener.level() instanceof ServerLevel serverLevel) {
-            return (RecipeManager) serverLevel.recipeAccess();
+            return serverLevel.recipeAccess();
         }
         return null;
     }
@@ -96,9 +98,11 @@ public class FletchingTableBlockMenu extends AbstractContainerMenu {
     private boolean isArrowInput(ItemStack stack) {
         if (stack.isEmpty()) return false;
         RecipeManager rm = getRecipeManager();
-        if (rm == null) return true; // client-side: allow placement, server will validate
+        if (rm == null) {
+            return stack.is(Items.ARROW);
+        }
 
-        for (RecipeHolder<FletchingTableRecipe> entry :
+        for (RecipeHolder<@NotNull FletchingTableRecipe> entry :
                 rm.recipeMap().byType(TheFletchingTableMod.FLETCHING_TABLE_RECIPE_TYPE.get())) {
             if (entry.value().arrowInput().test(stack)) {
                 return true;
@@ -110,9 +114,11 @@ public class FletchingTableBlockMenu extends AbstractContainerMenu {
     private boolean isPotionInput(ItemStack stack) {
         if (stack.isEmpty()) return false;
         RecipeManager rm = getRecipeManager();
-        if (rm == null) return true; // client-side: allow placement, server will validate
+        if (rm == null) {
+            return stack.is(Items.POTION) || stack.is(Items.SPLASH_POTION) || stack.is(Items.LINGERING_POTION);
+        }
 
-        for (RecipeHolder<FletchingTableRecipe> entry :
+        for (RecipeHolder<@NotNull FletchingTableRecipe> entry :
                 rm.recipeMap().byType(TheFletchingTableMod.FLETCHING_TABLE_RECIPE_TYPE.get())) {
             if (entry.value().potionInput().test(stack)) {
                 return true;
@@ -128,10 +134,11 @@ public class FletchingTableBlockMenu extends AbstractContainerMenu {
         else {
             this.removeTippedArrows();
         }
+        this.broadcastChanges();
     }
 
     private void showTippedArrows() {
-        Optional<RecipeHolder<FletchingTableRecipe>> recipe = getCurrentRecipe();
+        Optional<RecipeHolder<@NotNull FletchingTableRecipe>> recipe = getCurrentRecipe();
         if(recipe.isEmpty()) return;
 
         int count = this.inventory.getItem(ARROW_SLOT).getCount();
@@ -158,18 +165,18 @@ public class FletchingTableBlockMenu extends AbstractContainerMenu {
     }
 
     private boolean hasRecipe() {
-        Optional<RecipeHolder<FletchingTableRecipe>> recipe = getCurrentRecipe();
+        Optional<RecipeHolder<@NotNull FletchingTableRecipe>> recipe = getCurrentRecipe();
         return recipe.isPresent();
     }
 
-    private Optional<RecipeHolder<FletchingTableRecipe>> getCurrentRecipe() {
+    private Optional<RecipeHolder<@NotNull FletchingTableRecipe>> getCurrentRecipe() {
         RecipeManager rm = getRecipeManager();
         if (rm == null) return Optional.empty();
         return rm.getRecipeFor(TheFletchingTableMod.FLETCHING_TABLE_RECIPE_TYPE.get(), new FletchingTableRecipeInput(inventory.getItem(ARROW_SLOT), inventory.getItem(POTION_SLOT)), this.opener.level());
     }
 
     @Override
-    public void removed(Player player) {
+    public void removed(@NotNull Player player) {
         super.removed(player);
         if (player.level().isClientSide()) return;
 
@@ -185,7 +192,7 @@ public class FletchingTableBlockMenu extends AbstractContainerMenu {
     }
 
     @Override
-    public ItemStack quickMoveStack(Player player, int index) {
+    public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (!slot.hasItem()) return ItemStack.EMPTY;
@@ -228,7 +235,7 @@ public class FletchingTableBlockMenu extends AbstractContainerMenu {
     }
 
     @Override
-    public boolean stillValid(Player player) {
+    public boolean stillValid(@NotNull Player player) {
         return opener.blockPosition().closerThan(this.pos, 8.0);
     }
 }
