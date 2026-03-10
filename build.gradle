@@ -124,6 +124,9 @@ configurations {
 }
 
 repositories {
+    maven { url "https://maven.shedaniel.me" }
+    maven { url "https://maven.architectury.dev" }
+    maven { url "https://cursemaven.com" }
     maven {
         // location of the maven that hosts JEI files since January 2023
         name = "Jared's maven"
@@ -158,10 +161,17 @@ dependencies {
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
-    // compile against the JEI API but do not include it at runtime
+
+    // JEI
     compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
     // at runtime, use the full JEI jar for NeoForge
-    runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
+    //runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
+
+    // REI
+    compileOnly("me.shedaniel:RoughlyEnoughItems-api-neoforge:21.11.814")
+    runtimeOnly("me.shedaniel:RoughlyEnoughItems-neoforge:21.11.814")
+    compileOnly("dev.architectury:architectury-neoforge:19.0.1")
+    compileOnly("me.shedaniel.cloth:cloth-config-neoforge:21.11.151")
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
