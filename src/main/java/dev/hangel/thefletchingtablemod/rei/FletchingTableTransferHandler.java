@@ -9,7 +9,6 @@ import me.shedaniel.rei.api.common.entry.type.VanillaEntryTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.item.ItemStack;
 
@@ -51,20 +50,17 @@ public class FletchingTableTransferHandler implements TransferHandler {
         Minecraft mc = context.getMinecraft();
         if (mc.player == null) return Result.createFailed(Component.literal("No player"));
 
-        Inventory playerInv = mc.player.getInventory();
+        boolean hasArrow = !menu.getSlot(ARROW_SLOT).getItem().isEmpty()
+                || findMatchingSlot(menu, wantedArrow, PLAYER_INV_START, PLAYER_INV_END) != -1;
+        boolean hasPotion = !menu.getSlot(POTION_SLOT).getItem().isEmpty()
+                || findMatchingSlot(menu, wantedPotion, PLAYER_INV_START, PLAYER_INV_END) != -1;
 
-        int arrowSourceSlot = findMatchingSlot(menu, playerInv, wantedArrow, PLAYER_INV_START, PLAYER_INV_END);
-        int potionSourceSlot = findMatchingSlot(menu, playerInv, wantedPotion, PLAYER_INV_START, PLAYER_INV_END);
-
-        if (arrowSourceSlot == -1 && menu.getSlot(ARROW_SLOT).getItem().isEmpty()) {
-            return Result.createFailed(Component.translatable("error.rei.not.enough.materials"));
-        }
-        if (potionSourceSlot == -1 && menu.getSlot(POTION_SLOT).getItem().isEmpty()) {
+        if (!hasArrow || !hasPotion) {
             return Result.createFailed(Component.translatable("error.rei.not.enough.materials"));
         }
 
         if (!context.isActuallyCrafting()) {
-            return Result.createSuccessful();
+            return Result.createSuccessful().blocksFurtherHandling(true);
         }
 
         MultiPlayerGameMode gameMode = mc.gameMode;
@@ -80,15 +76,14 @@ public class FletchingTableTransferHandler implements TransferHandler {
             gameMode.handleInventoryMouseClick(containerId, POTION_SLOT, 0, ClickType.QUICK_MOVE, mc.player);
         }
 
-        // Re-find slots after clearing (indices may have shifted)
-        arrowSourceSlot = findMatchingSlot(menu, playerInv, wantedArrow, PLAYER_INV_START, PLAYER_INV_END);
-        potionSourceSlot = findMatchingSlot(menu, playerInv, wantedPotion, PLAYER_INV_START, PLAYER_INV_END);
+        // Find slots after clearing
+        int arrowSourceSlot = findMatchingSlot(menu, wantedArrow, PLAYER_INV_START, PLAYER_INV_END);
+        int potionSourceSlot = findMatchingSlot(menu, wantedPotion, PLAYER_INV_START, PLAYER_INV_END);
 
         // Move arrow to slot 0
         if (arrowSourceSlot != -1) {
             gameMode.handleInventoryMouseClick(containerId, arrowSourceSlot, 0, ClickType.PICKUP, mc.player);
             gameMode.handleInventoryMouseClick(containerId, ARROW_SLOT, 0, ClickType.PICKUP, mc.player);
-            // If there's leftover on cursor, put it back
             if (!menu.getCarried().isEmpty()) {
                 gameMode.handleInventoryMouseClick(containerId, arrowSourceSlot, 0, ClickType.PICKUP, mc.player);
             }
@@ -98,13 +93,12 @@ public class FletchingTableTransferHandler implements TransferHandler {
         if (potionSourceSlot != -1) {
             gameMode.handleInventoryMouseClick(containerId, potionSourceSlot, 0, ClickType.PICKUP, mc.player);
             gameMode.handleInventoryMouseClick(containerId, POTION_SLOT, 0, ClickType.PICKUP, mc.player);
-            // If there's leftover on cursor, put it back
             if (!menu.getCarried().isEmpty()) {
                 gameMode.handleInventoryMouseClick(containerId, potionSourceSlot, 0, ClickType.PICKUP, mc.player);
             }
         }
 
-        return Result.createSuccessful();
+        return Result.createSuccessful().blocksFurtherHandling(true);
     }
 
     private static ItemStack getFirstItemStack(EntryIngredient ingredient) {
@@ -117,7 +111,7 @@ public class FletchingTableTransferHandler implements TransferHandler {
         return ItemStack.EMPTY;
     }
 
-    private static int findMatchingSlot(FletchingTableBlockMenu menu, Inventory playerInv, ItemStack wanted, int from, int to) {
+    private static int findMatchingSlot(FletchingTableBlockMenu menu, ItemStack wanted, int from, int to) {
         for (int i = from; i < to; i++) {
             ItemStack slotStack = menu.getSlot(i).getItem();
             if (ItemStack.isSameItemSameComponents(slotStack, wanted)) {
