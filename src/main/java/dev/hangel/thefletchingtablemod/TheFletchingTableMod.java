@@ -3,9 +3,8 @@ package dev.hangel.thefletchingtablemod;
 import dev.hangel.thefletchingtablemod.recipe.FletchingTableRecipe;
 import dev.hangel.thefletchingtablemod.screen.FletchingTableBlockMenu;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.crafting.RecipeBookCategory;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
@@ -51,9 +50,14 @@ public class TheFletchingTableMod {
 
     public static final DeferredHolder<RecipeType<?>, RecipeType<FletchingTableRecipe>>
             FLETCHING_TABLE_RECIPE_TYPE =
-            RECIPE_TYPES.register("fletching_table",
-                    () -> RecipeType.simple(ResourceLocation.fromNamespaceAndPath(MOD_ID, "fletching_table"))
-            );
+            RECIPE_TYPES.register("fletching_table", RecipeType::simple);
+
+    public static final DeferredRegister<RecipeBookCategory> RECIPE_BOOK_CATEGORIES =
+            DeferredRegister.create(Registries.RECIPE_BOOK_CATEGORY, MOD_ID);
+
+    public static final DeferredHolder<RecipeBookCategory, RecipeBookCategory>
+            FLETCHING_TABLE_RECIPE_BOOK_CATEGORY =
+            RECIPE_BOOK_CATEGORIES.register("fletching_table", RecipeBookCategory::new);
 
     public TheFletchingTableMod(IEventBus modEventBus, ModContainer modContainer) {
         modEventBus.addListener(this::commonSetup);
@@ -61,6 +65,7 @@ public class TheFletchingTableMod {
         MENUS.register(modEventBus);
         RECIPE_SERIALIZERS.register(modEventBus);
         RECIPE_TYPES.register(modEventBus);
+        RECIPE_BOOK_CATEGORIES.register(modEventBus);
 
         NeoForge.EVENT_BUS.register(this);
     }

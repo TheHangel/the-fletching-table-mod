@@ -6,6 +6,7 @@ import dev.hangel.thefletchingtablemod.recipe.FletchingTableRecipeInput;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -14,7 +15,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.world.item.crafting.RecipeManager;
 
 import java.util.Optional;
 
@@ -49,26 +50,26 @@ public class FletchingTableBlockMenu extends AbstractContainerMenu {
 
         this.addSlot(new Slot(this.inventory, ARROW_SLOT, 25, 34) {
             @Override
-            public boolean mayPlace(@NotNull ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return isArrowInput(stack);
             }
         });
 
         this.addSlot(new Slot(this.inventory, POTION_SLOT, 78, 34) {
             @Override
-            public boolean mayPlace(@NotNull ItemStack stack) {
+            public boolean mayPlace(ItemStack stack) {
                 return isPotionInput(stack);
             }
         });
 
         this.addSlot(new Slot(this.inventory, TIPPED_ARROW_SLOT, 132, 34) {
             @Override
-            public boolean mayPlace(@NotNull ItemStack p_40231_) {
+            public boolean mayPlace(ItemStack stack) {
                 return false;
             }
 
             @Override
-            public void onTake(@NotNull Player player, @NotNull ItemStack stack) {
+            public void onTake(Player player, ItemStack stack) {
                 super.onTake(player, stack);
 
                 int toConsume  = stack.getCount();
@@ -85,11 +86,20 @@ public class FletchingTableBlockMenu extends AbstractContainerMenu {
         this.addPlayerHotbar(inv);
     }
 
+    private RecipeManager getRecipeManager() {
+        if (opener.level() instanceof ServerLevel serverLevel) {
+            return (RecipeManager) serverLevel.recipeAccess();
+        }
+        return null;
+    }
+
     private boolean isArrowInput(ItemStack stack) {
         if (stack.isEmpty()) return false;
+        RecipeManager rm = getRecipeManager();
+        if (rm == null) return true; // client-side: allow placement, server will validate
 
         for (RecipeHolder<FletchingTableRecipe> entry :
-                opener.level().getRecipeManager().getAllRecipesFor(TheFletchingTableMod.FLETCHING_TABLE_RECIPE_TYPE.get())) {
+                rm.recipeMap().byType(TheFletchingTableMod.FLETCHING_TABLE_RECIPE_TYPE.get())) {
             if (entry.value().arrowInput().test(stack)) {
                 return true;
             }
@@ -99,9 +109,11 @@ public class FletchingTableBlockMenu extends AbstractContainerMenu {
 
     private boolean isPotionInput(ItemStack stack) {
         if (stack.isEmpty()) return false;
+        RecipeManager rm = getRecipeManager();
+        if (rm == null) return true; // client-side: allow placement, server will validate
 
         for (RecipeHolder<FletchingTableRecipe> entry :
-                opener.level().getRecipeManager().getAllRecipesFor(TheFletchingTableMod.FLETCHING_TABLE_RECIPE_TYPE.get())) {
+                rm.recipeMap().byType(TheFletchingTableMod.FLETCHING_TABLE_RECIPE_TYPE.get())) {
             if (entry.value().potionInput().test(stack)) {
                 return true;
             }
@@ -123,7 +135,7 @@ public class FletchingTableBlockMenu extends AbstractContainerMenu {
         if(recipe.isEmpty()) return;
 
         int count = this.inventory.getItem(ARROW_SLOT).getCount();
-        ItemStack tippedArrowsStack = recipe.get().value().output();
+        ItemStack tippedArrowsStack = recipe.get().value().output().copy();
         tippedArrowsStack.setCount(count);
 
         ItemStack potionStack = this.inventory.getItem(POTION_SLOT);
@@ -151,7 +163,9 @@ public class FletchingTableBlockMenu extends AbstractContainerMenu {
     }
 
     private Optional<RecipeHolder<FletchingTableRecipe>> getCurrentRecipe() {
-        return this.opener.level().getRecipeManager().getRecipeFor(TheFletchingTableMod.FLETCHING_TABLE_RECIPE_TYPE.get(), new FletchingTableRecipeInput(inventory.getItem(ARROW_SLOT), inventory.getItem(POTION_SLOT)), this.opener.level());
+        RecipeManager rm = getRecipeManager();
+        if (rm == null) return Optional.empty();
+        return rm.getRecipeFor(TheFletchingTableMod.FLETCHING_TABLE_RECIPE_TYPE.get(), new FletchingTableRecipeInput(inventory.getItem(ARROW_SLOT), inventory.getItem(POTION_SLOT)), this.opener.level());
     }
 
     @Override
@@ -171,7 +185,7 @@ public class FletchingTableBlockMenu extends AbstractContainerMenu {
     }
 
     @Override
-    public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
+    public ItemStack quickMoveStack(Player player, int index) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (!slot.hasItem()) return ItemStack.EMPTY;
@@ -214,7 +228,7 @@ public class FletchingTableBlockMenu extends AbstractContainerMenu {
     }
 
     @Override
-    public boolean stillValid(@NotNull Player player) {
+    public boolean stillValid(Player player) {
         return opener.blockPosition().closerThan(this.pos, 8.0);
     }
 }

@@ -1,11 +1,7 @@
 {
   "type": "the_fletching_table_mod:fletching_table",
-  "arrow": {
-    "item": "minecraft:arrow"
-  },
-  "potion": {
-    "item": "minecraft:potion"
-  },
+  "arrow": "minecraft:arrow",
+  "potion": "minecraft:potion",
   "result": {
     "id": "minecraft:tipped_arrow"
   }

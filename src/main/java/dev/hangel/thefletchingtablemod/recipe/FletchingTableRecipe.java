@@ -4,57 +4,81 @@ import dev.hangel.thefletchingtablemod.TheFletchingTableMod;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.PlacementInfo;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeBookCategory;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public record FletchingTableRecipe(Ingredient arrowInput, Ingredient potionInput, ItemStack output)
-        implements Recipe<FletchingTableRecipeInput> {
+import java.util.List;
 
-    @Override
-    public @NotNull NonNullList<Ingredient> getIngredients() {
-        NonNullList<Ingredient> list = NonNullList.create();
-        list.add(arrowInput);
-        list.add(potionInput);
-        return list;
+public class FletchingTableRecipe implements Recipe<FletchingTableRecipeInput> {
+
+    private final Ingredient arrowInput;
+    private final Ingredient potionInput;
+    private final ItemStack output;
+    private PlacementInfo info;
+
+    public FletchingTableRecipe(Ingredient arrowInput, Ingredient potionInput, ItemStack output) {
+        this.arrowInput = arrowInput;
+        this.potionInput = potionInput;
+        this.output = output;
+    }
+
+    public Ingredient arrowInput() {
+        return arrowInput;
+    }
+
+    public Ingredient potionInput() {
+        return potionInput;
+    }
+
+    public ItemStack output() {
+        return output;
     }
 
     @Override
-    public boolean matches(FletchingTableRecipeInput input, @NotNull Level level) {
+    public boolean matches(FletchingTableRecipeInput input, Level level) {
         return arrowInput.test(input.getItem(0))
                 && potionInput.test(input.getItem(1));
     }
 
     @Override
-    public @NotNull ItemStack assemble(@NotNull FletchingTableRecipeInput input, HolderLookup.@NotNull Provider lookup) {
+    public @NotNull ItemStack assemble(FletchingTableRecipeInput input, HolderLookup.Provider lookup) {
         return output.copy();
     }
 
     @Override
-    public boolean canCraftInDimensions(int width, int height) {
+    public boolean isSpecial() {
         return true;
     }
 
     @Override
-    public @NotNull ItemStack getResultItem(HolderLookup.@Nullable Provider registriesLookup) {
-        return output;
+    public PlacementInfo placementInfo() {
+        if (this.info == null) {
+            this.info = PlacementInfo.create(List.of(arrowInput, potionInput));
+        }
+        return this.info;
     }
 
     @Override
-    public @NotNull RecipeSerializer<?> getSerializer() {
+    public RecipeBookCategory recipeBookCategory() {
+        return TheFletchingTableMod.FLETCHING_TABLE_RECIPE_BOOK_CATEGORY.get();
+    }
+
+    @Override
+    public @NotNull RecipeSerializer<FletchingTableRecipe> getSerializer() {
         return TheFletchingTableMod.FLETCHING_TABLE_RECIPE_SERIALIZER.get();
     }
 
     @Override
-    public @NotNull RecipeType<?> getType() {
+    public @NotNull RecipeType<FletchingTableRecipe> getType() {
         return TheFletchingTableMod.FLETCHING_TABLE_RECIPE_TYPE.get();
     }
 
