@@ -7,6 +7,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.data.AtlasIds;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
@@ -25,7 +26,7 @@ public class FletchingTableBlockScreen extends AbstractContainerScreen<Fletching
         int y = (height - imageHeight) / 2;
 
         Minecraft client = Minecraft.getInstance();
-        TextureAtlas atlas = client.getAtlasManager().getAtlasOrThrow(TextureAtlas.LOCATION_BLOCKS);
+        TextureAtlas atlas = client.getAtlasManager().getAtlasOrThrow(AtlasIds.ITEMS);
 
         context.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, x, y, 0, 0, imageWidth, imageHeight, 256, 256);
 
