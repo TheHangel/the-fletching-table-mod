@@ -20,6 +20,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.block.Blocks;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,7 @@ import java.util.Optional;
 @JeiPlugin
 public class FletchingTableJEIPlugin implements IModPlugin {
     @Override
-    public Identifier getPluginUid() {
+    public @NotNull Identifier getPluginUid() {
         return Identifier.fromNamespaceAndPath(TheFletchingTableMod.MOD_ID, "jei_fletching_table");
     }
 
@@ -38,7 +39,7 @@ public class FletchingTableJEIPlugin implements IModPlugin {
     }
 
     @Override
-    public void registerRecipes(IRecipeRegistration registration) {
+    public void registerRecipes(@NotNull IRecipeRegistration registration) {
         List<FletchingTableJEIRecipe> jeiRecipes = new ArrayList<>();
 
         ItemStack arrowDisplay = new ItemStack(Items.ARROW);
