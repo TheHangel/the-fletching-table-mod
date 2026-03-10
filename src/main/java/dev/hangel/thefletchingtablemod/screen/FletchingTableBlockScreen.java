@@ -38,7 +38,7 @@ public class FletchingTableBlockScreen extends AbstractContainerScreen<Fletching
         TextureAtlasSprite tippedArrowSpriteHead = atlas.getSprite(Identifier.parse("item/tipped_arrow_head"));
 
         if(this.menu.getSlot(0).getItem().isEmpty()) {
-            context.blitSprite(RenderPipelines.GUI_TEXTURED, arrowSprite, x + 25, y + 34, 16, 16);
+            context.blitSprite(RenderPipelines.GUI_TEXTURED, arrowSprite, x + 25, y + 34, 16, 16, 0xFF000000);
         }
 
         long time = client.level != null ? client.level.getGameTime() : 0;
@@ -54,12 +54,12 @@ public class FletchingTableBlockScreen extends AbstractContainerScreen<Fletching
         }
 
         if(this.menu.getSlot(1).getItem().isEmpty()) {
-            context.blitSprite(RenderPipelines.GUI_TEXTURED, current, x + 78, y + 34, 16, 16);
+            context.blitSprite(RenderPipelines.GUI_TEXTURED, current, x + 78, y + 34, 16, 16, 0xFF000000);
         }
 
         if(this.menu.getSlot(2).getItem().isEmpty()) {
-            context.blitSprite(RenderPipelines.GUI_TEXTURED, tippedArrowSpriteBase, x + 132, y + 34, 16, 16);
-            context.blitSprite(RenderPipelines.GUI_TEXTURED, tippedArrowSpriteHead, x + 132, y + 34, 16, 16);
+            context.blitSprite(RenderPipelines.GUI_TEXTURED, tippedArrowSpriteBase, x + 132, y + 34, 16, 16, 0xFF000000);
+            context.blitSprite(RenderPipelines.GUI_TEXTURED, tippedArrowSpriteHead, x + 132, y + 34, 16, 16, 0xFF000000);
         }
     }
 
