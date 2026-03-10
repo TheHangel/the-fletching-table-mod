@@ -6,6 +6,7 @@ import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
 import me.shedaniel.rei.api.client.registry.screen.ScreenRegistry;
+import me.shedaniel.rei.api.client.registry.transfer.TransferHandlerRegistry;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import me.shedaniel.rei.forge.REIPluginClient;
 import net.minecraft.core.Holder;
@@ -103,5 +104,10 @@ public class FletchingTableREIPlugin implements REIClientPlugin {
     @Override
     public void registerScreens(ScreenRegistry registry) {
         registry.registerClickArea(screen -> new Rectangle(screen.getGuiLeft() + 100, screen.getGuiTop() + 34, 25, 20), FletchingTableBlockScreen.class, FletchingTableREICategory.CATEGORY_ID);
+    }
+
+    @Override
+    public void registerTransferHandlers(TransferHandlerRegistry registry) {
+        registry.register(new FletchingTableTransferHandler());
     }
 }
