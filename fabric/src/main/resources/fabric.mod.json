@@ -1,0 +1,39 @@
+{
+    "schemaVersion": 1,
+    "id": "${mod_id}",
+    "version": "${version}",
+    "name": "${mod_name}",
+    "description": "${description}",
+    "authors": [
+        "${mod_author}"
+    ],
+    "contact": {
+        "homepage": "https://www.hangel.dev/",
+        "sources": "https://github.com/TheHangel/the-fletching-table-mod",
+        "issues": "https://github.com/TheHangel/the-fletching-table-mod/issues"
+    },
+    "license": "${license}",
+    "icon": "assets/the_fletching_table_mod/logo.png",
+    "environment": "*",
+    "entrypoints": {
+        "main": [
+            "dev.hangel.thefletchingtablemod.TheFletchingTableModFabric"
+        ],
+        "client": [
+            "dev.hangel.thefletchingtablemod.TheFletchingTableModFabricClient"
+        ],
+        "rei_client": [
+            "dev.hangel.thefletchingtablemod.rei.FletchingTableREIPlugin"
+        ]
+    },
+    "mixins": [
+        "${mod_id}.mixins.json"
+    ],
+    "accessWidener": "${mod_id}.accesswidener",
+    "depends": {
+        "fabricloader": ">=${fabric_loader_version}",
+        "fabric-api": "*",
+        "minecraft": ">=${minecraft_version}",
+        "java": ">=${java_version}"
+    }
+}
