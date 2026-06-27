@@ -22,6 +22,9 @@
         "client": [
             "dev.hangel.thefletchingtablemod.TheFletchingTableModFabricClient"
         ],
+        "jei_mod_plugin": [
+            "dev.hangel.thefletchingtablemod.jei.FletchingTableJEIPlugin"
+        ],
         "rei_client": [
             "dev.hangel.thefletchingtablemod.rei.FletchingTableREIPlugin"
         ]
