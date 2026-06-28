@@ -3,9 +3,22 @@ plugins {
     id 'net.neoforged.moddev'
 }
 
+repositories {
+    maven { url = 'https://maven.shedaniel.me/' }       // REI + Cloth Config
+    maven { url = 'https://maven.architectury.dev/' }   // Architectury (REI dependency)
+}
+
 dependencies {
     // JEI (NeoForge) - compiles the shared common JEI classes and provides runtime integration.
     implementation "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+
+    // REI (NeoForge) - OPTIONAL at runtime. The NeoForge build requires MC >=26.1.2, so it is only
+    // present when the user runs a recent enough version; the @REIPluginClient class loads only then.
+    // compileOnly to compile the shared common REI classes + the @REIPluginClient entry; runtimeOnly to
+    // actually exercise it in the dev client.
+    compileOnly "me.shedaniel:RoughlyEnoughItems-api:${rei_version}"
+    compileOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
+    runtimeOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
 }
 
 neoForge {

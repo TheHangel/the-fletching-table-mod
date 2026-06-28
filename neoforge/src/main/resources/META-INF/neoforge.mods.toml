@@ -25,3 +25,11 @@ type="required"
 versionRange = "${minecraft_version_range}"
 ordering = "NONE"
 side = "BOTH"
+# REI is optional: its NeoForge build requires MC >=26.1.2, so it is simply absent on lower versions.
+# The @REIPluginClient integration activates only when REI is present.
+[[dependencies.${mod_id}]]
+modId = "roughlyenoughitems"
+type="optional"
+versionRange = "*"
+ordering = "AFTER"
+side = "CLIENT"
