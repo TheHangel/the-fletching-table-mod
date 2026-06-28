@@ -1,0 +1,72 @@
+package dev.hangel.thefletchingtablemod.jei;
+
+import dev.hangel.thefletchingtablemod.Constants;
+import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
+import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.category.IRecipeCategory;
+import mezz.jei.api.recipe.types.IRecipeType;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
+import org.jetbrains.annotations.NotNull;
+
+public class FletchingTableJEICategory implements IRecipeCategory<FletchingTableJEIRecipe> {
+    public static final Identifier UUID = Identifier.fromNamespaceAndPath(Constants.MOD_ID, "fletching_table");
+    public static final Identifier GUI_TEXTURE =
+            Identifier.fromNamespaceAndPath(Constants.MOD_ID, "textures/gui/fletching_table_gui.png");
+
+    public static final IRecipeType<FletchingTableJEIRecipe> FLETCHING_TABLE_RECIPE_TYPE =
+            IRecipeType.create(UUID, FletchingTableJEIRecipe.class);
+
+    private final IDrawable background;
+    private final IDrawable icon;
+
+    public FletchingTableJEICategory(IGuiHelper helper) {
+        this.background = helper.createDrawable(GUI_TEXTURE, 0, 0, 176, 80);
+        this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(Blocks.FLETCHING_TABLE));
+    }
+
+    @Override
+    public @NotNull IRecipeType<FletchingTableJEIRecipe> getRecipeType() {
+        return FLETCHING_TABLE_RECIPE_TYPE;
+    }
+
+    @Override
+    public @NotNull Component getTitle() {
+        return Component.translatable("block.minecraft.fletching_table");
+    }
+
+    @Override
+    public IDrawable getIcon() {
+        return this.icon;
+    }
+
+    @Override
+    public int getWidth() {
+        return 176;
+    }
+
+    @Override
+    public int getHeight() {
+        return 80;
+    }
+
+    @Override
+    public void draw(@NotNull FletchingTableJEIRecipe recipe, @NotNull IRecipeSlotsView recipeSlotsView, @NotNull GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
+        background.draw(guiGraphics);
+    }
+
+    @Override
+    public void setRecipe(IRecipeLayoutBuilder builder, FletchingTableJEIRecipe recipe, @NotNull IFocusGroup focuses) {
+        builder.addSlot(RecipeIngredientRole.INPUT, 25, 34).add(recipe.arrowInput());
+        builder.addSlot(RecipeIngredientRole.INPUT, 78, 34).add(recipe.potionInput());
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 132, 34).add(recipe.output());
+    }
+}

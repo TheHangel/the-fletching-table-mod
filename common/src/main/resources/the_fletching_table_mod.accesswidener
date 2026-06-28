@@ -1,0 +1,8 @@
+accessWidener	v2	official
+
+# Allow constructing a vanilla MenuType directly (Fabric has no extended screen handler bundle on 26.1).
+accessible	method	net/minecraft/world/inventory/MenuType	<init>	(Lnet/minecraft/world/inventory/MenuType$MenuSupplier;Lnet/minecraft/world/flag/FeatureFlagSet;)V
+
+# Expose the container screen position so the REI click-area can be computed (Fabric has no getGuiLeft/getGuiTop).
+accessible	field	net/minecraft/client/gui/screens/inventory/AbstractContainerScreen	leftPos	I
+accessible	field	net/minecraft/client/gui/screens/inventory/AbstractContainerScreen	topPos	I

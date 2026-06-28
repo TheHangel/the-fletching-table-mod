@@ -1,0 +1,35 @@
+modLoader = "javafml" #mandatory
+loaderVersion = "${neoforge_loader_version_range}" #mandatory
+license = "${license}"
+issueTrackerURL="https://github.com/TheHangel/the-fletching-table-mod/issues" #optional
+[[mods]] #mandatory
+modId = "${mod_id}" #mandatory
+version = "${version}" #mandatory
+displayName = "${mod_name}" #mandatory
+displayURL="https://github.com/TheHangel/the-fletching-table-mod" #optional
+logoFile="assets/the_fletching_table_mod/logo.png" #optional
+credits="${credits}" #optional
+authors = "${mod_author}" #optional
+description = '''${description}''' #mandatory (Supports multiline text)
+[[mixins]]
+config = "${mod_id}.mixins.json"
+[[dependencies.${mod_id}]] #optional
+modId = "neoforge" #mandatory
+type="required" #mandatory (Can be one of "required", "optional", "incompatible" or "discouraged")
+versionRange = "[${neoforge_version},)" #mandatory
+ordering = "NONE"
+side = "BOTH"
+[[dependencies.${mod_id}]]
+modId = "minecraft"
+type="required"
+versionRange = "${minecraft_version_range}"
+ordering = "NONE"
+side = "BOTH"
+# REI is optional: its NeoForge build requires MC >=26.1.2, so it is simply absent on lower versions.
+# The @REIPluginClient integration activates only when REI is present.
+[[dependencies.${mod_id}]]
+modId = "roughlyenoughitems"
+type="optional"
+versionRange = "*"
+ordering = "AFTER"
+side = "CLIENT"
