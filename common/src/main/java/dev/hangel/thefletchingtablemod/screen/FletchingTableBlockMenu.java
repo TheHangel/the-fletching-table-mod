@@ -6,6 +6,7 @@ import dev.hangel.thefletchingtablemod.registry.ModRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Prediction;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -180,7 +181,9 @@ public class FletchingTableBlockMenu extends AbstractContainerMenu {
             ItemStack toGive = stack.copy();
             inventory.setItem(slot, ItemStack.EMPTY);
 
-            player.getInventory().placeItemBackInInventory(toGive);
+            // 26.3: placeItemBackInInventory now takes a Prediction. This path is server-only
+            // (guarded by isClientSide above), so SERVER_ONLY matches the pre-26.3 behavior.
+            player.getInventory().placeItemBackInInventory(toGive, Prediction.SERVER_ONLY);
         }
     }
 

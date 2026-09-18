@@ -18,7 +18,7 @@ dependencies {
     // actually exercise it in the dev client.
     compileOnly "me.shedaniel:RoughlyEnoughItems-api:${rei_version}"
     compileOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
-    runtimeOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
+    // runtimeOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}" // re-enable when REI ships for 26.3 (would crash on 26.3)
 }
 
 neoForge {

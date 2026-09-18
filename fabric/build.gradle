@@ -16,9 +16,11 @@ dependencies {
     // JEI (Fabric) - compiles the shared common JEI classes and provides runtime integration.
     implementation "mezz.jei:jei-${minecraft_version}-fabric:${jei_version}"
 
-    // REI (Fabric only on MC 26.1). API for compilation, full mod for runtime.
-    implementation "me.shedaniel:RoughlyEnoughItems-api:${rei_version}"
-    runtimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${rei_version}"
+    // REI: no 26.3 build exists yet. Keep the API on the compile classpath so the shared REI
+    // classes still compile (they stay dormant at runtime until REI ships for 26.3), but do NOT
+    // add the full REI mod at runtime — the 26.1 build would crash on 26.3.
+    compileOnly "me.shedaniel:RoughlyEnoughItems-api:${rei_version}"
+    // runtimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${rei_version}" // re-enable when REI ships for 26.3
 }
 
 loom {
